@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP Market User Interview Dashboard | moomoo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .collapse-content.open { max-height: 5000px; transition: max-height 0.5s ease-in; }
+        .priority-p0 { border-left: 4px solid #ef4444; }
+        .priority-p1 { border-left: 4px solid #f59e0b; }
+        .priority-p2 { border-left: 4px solid #3b82f6; }
+        .segment-inapp { border-left: 4px solid #10b981; }
+        .segment-external { border-left: 4px solid #8b5cf6; }
+        .segment-fx { border-left: 4px solid #f97316; }
+        .segment-highvalue { border-left: 4px solid #ec4899; }
+        .star { color: #f59e0b; }
+        .star-empty { color: #d1d5db; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; }
+        .nav-link { transition: all 0.2s; }
+        .nav-link:hover { background: rgba(255,255,255,0.1); }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        .card-hover { transition: all 0.2s; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Navigation -->
+<nav class="bg-gray-900 text-white sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-sm">m</div>
+            <h1 class="text-lg font-semibold">JP User Interview Dashboard</h1>
+        </div>
+        <div class="hidden md:flex gap-1 text-sm">
+            <a href="#overview" class="nav-link px-3 py-1.5 rounded">Overview</a>
+            <a href="#timeline" class="nav-link px-3 py-1.5 rounded">Timeline</a>
+            <a href="#insights" class="nav-link px-3 py-1.5 rounded">Insights</a>
+            <a href="#recommendations" class="nav-link px-3 py-1.5 rounded">Recommendations</a>
+            <a href="#acquisition" class="nav-link px-3 py-1.5 rounded">Acquisition</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero / Overview Section -->
+<section id="overview" class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold mb-2">JP Market User Research</h2>
+            <p class="text-gray-400">2026年4月 用研做货侧 - 综合分析 Dashboard</p>
+        </div>
+
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="bg-white/10 backdrop-blur rounded-xl p-5 text-center">
+                <div class="text-3xl font-bold text-orange-400">23+</div>
+                <div class="text-sm text-gray-300 mt-1">Total Sessions</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur rounded-xl p-5 text-center">
+                <div class="text-3xl font-bold text-blue-400">10</div>
+                <div class="text-sm text-gray-300 mt-1">Research Days</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur rounded-xl p-5 text-center">
+                <div class="text-3xl font-bold text-green-400">4/13-24</div>
+                <div class="text-sm text-gray-300 mt-1">Period</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur rounded-xl p-5 text-center">
+                <div class="text-3xl font-bold text-purple-400">4</div>
+                <div class="text-sm text-gray-300 mt-1">User Segments</div>
+            </div>
+        </div>
+
+        <!-- User Segments -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                    <span class="font-semibold text-emerald-300">In-App Active</span>
+                </div>
+                <p class="text-sm text-gray-300">moomoo existing users (US/JP stocks)</p>
+                <p class="text-xs text-gray-400 mt-2">Focus: Product strength -> AUM growth</p>
+            </div>
+            <div class="bg-violet-500/20 border border-violet-500/30 rounded-xl p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-violet-400"></div>
+                    <span class="font-semibold text-violet-300">External Active</span>
+                </div>
+                <p class="text-sm text-gray-300">Rakuten / SBI / Monex / GMO users</p>
+                <p class="text-xs text-gray-400 mt-2">Focus: USP acquisition feasibility</p>
+            </div>
+            <div class="bg-orange-500/20 border border-orange-500/30 rounded-xl p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-orange-400"></div>
+                    <span class="font-semibold text-orange-300">FX Traders</span>
+                </div>
+                <p class="text-sm text-gray-300">Leveraged FX traders (in/external)</p>
+                <p class="text-xs text-gray-400 mt-2">Focus: Cross-sell potential</p>
+            </div>
+            <div class="bg-pink-500/20 border border-pink-500/30 rounded-xl p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-pink-400"></div>
+                    <span class="font-semibold text-pink-300">High-AUM</span>
+                </div>
+                <p class="text-sm text-gray-300">High-value in-app clients</p>
+                <p class="text-xs text-gray-400 mt-2">Focus: Retention & deep needs</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section id="timeline" class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-6">Interview Timeline</h2>
+        <p class="text-gray-500 mb-8">Click each day to expand detailed findings</p>
+
+        <div class="space-y-3" id="timeline-container">
+            <!-- Day 1-4 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day1-4')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/13-16</span>
+                        <div>
+                            <span class="font-semibold">Day 1-4: Week 1 Early Phase</span>
+                            <span class="text-sm text-gray-500 ml-3">10 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day1-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day1-4">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="segment-inapp bg-gray-50 rounded-lg p-4">
+                                <div class="text-sm font-semibold text-gray-600 mb-2">First Interviewee Profile</div>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>Futures in-app user, Male 41-50 yo</li>
+                                    <li>JP stock / US stock / Futures cross-trader</li>
+                                    <li>Uses SBI / Monex / GMO</li>
+                                    <li>Non-NISA AUM: 50M+ JPY</li>
+                                    <li>PC + Desktop App user</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="text-sm font-semibold text-gray-600 mb-2">Session Count</div>
+                                <div class="text-sm text-gray-600 space-y-1">
+                                    <p>4/13 (Mon): 2 sessions</p>
+                                    <p>4/14 (Tue): 2 sessions</p>
+                                    <p>4/15 (Wed): 4 sessions (+1 atypical)</p>
+                                    <p>4/16 (Thu): 2 sessions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day5')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/17</span>
+                        <div>
+                            <span class="font-semibold">Day 5: In-App JP Stock + External FX</span>
+                            <span class="text-sm text-gray-500 ml-3">3 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day5">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-red-600 mb-2">Key Findings</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>Real-time fractional trading blocks migration</li>
+                                    <li>MRF/MMF demand is strong</li>
+                                    <li>Advanced features need education</li>
+                                    <li>Event contracts: low priority ("gambling")</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">Live Highlights</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>IT company user interested in moomoo API</li>
+                                    <li>User accidentally bought 100K JPY MMF (UI didn't distinguish live/unlaunched features)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 6 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day6')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/20</span>
+                        <div>
+                            <span class="font-semibold">Day 6: In-App JP Stock Users</span>
+                            <span class="text-sm text-gray-500 ml-3">2 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day6">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-red-600 mb-2">Key Findings</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>Account separation ("bucket" concept) = strongest product demand</li>
+                                    <li>Cross-broker portfolio aggregation is a pain point</li>
+                                    <li>JP stock orders should align with US stock level</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">Live Highlights</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>One interviewee is <strong>former Monex employee</strong></li>
+                                    <li>One is a <strong>heavy crypto player</strong></li>
+                                </ul>
+                                <div class="mt-3 bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                    <p class="text-sm italic text-orange-800">"絶対にベスト" (Absolutely the best) -- on moomoo UI/UX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 7 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day7')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/21</span>
+                        <div>
+                            <span class="font-semibold">Day 7: In-App US Stock + External JP Stock</span>
+                            <span class="text-sm text-gray-500 ml-3">2 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day7">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-red-600 mb-2">Key Findings</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>Stop-loss + entry order automation is core need</li>
+                                    <li>Screener redesign makes it hard to find</li>
+                                    <li>Shareholder benefits (株主優待) important for JP investors</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">Live Highlights</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>External user described as <strong>"ideal TA archetype"</strong></li>
+                                    <li>Uses SBI + Rakuten, trades ETF + crypto</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 8 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day8')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/22</span>
+                        <div>
+                            <span class="font-semibold">Day 8: External JP Stock Users</span>
+                            <span class="text-sm text-gray-500 ml-3">3 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day8">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-red-600 mb-2">Key Findings</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>AI as Hook but reliability is the challenge</li>
+                                    <li>Bank/fund flow is core switching barrier</li>
+                                    <li>Rakuten order UX is poor = moomoo opportunity</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">User Quotes</div>
+                                <div class="space-y-2">
+                                    <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                        <p class="text-sm italic text-red-800">"If 2nd broker overlaps with SBI, there's no reason to use it"</p>
+                                    </div>
+                                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                        <p class="text-sm italic text-yellow-800">AI returns wrong/confused answers (mixing companies, outdated split info)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 9 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day9')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/23</span>
+                        <div>
+                            <span class="font-semibold">Day 9: FX Users + External US Stock</span>
+                            <span class="text-sm text-gray-500 ml-3">4 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day9">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-red-600 mb-2">Key Findings</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>FX Copy Trading = major opportunity for beginners</li>
+                                    <li>Local platform trust advantage exists</li>
+                                    <li>TradingView-level charts required by active FX traders</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">Segment Mix</div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-medium">FX x3</span>
+                                    <span class="px-2 py-1 bg-violet-100 text-violet-700 rounded text-xs font-medium">External US Stock x1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 10 -->
+            <div class="bg-white rounded-xl shadow-sm card-hover">
+                <button onclick="toggleCollapse('day10')" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-mono bg-gray-100 px-3 py-1 rounded">4/24</span>
+                        <div>
+                            <span class="font-semibold">Day 10: Futures + US Stock + High-AUM</span>
+                            <span class="text-sm text-gray-500 ml-3">4 sessions</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transition-transform" id="arrow-day10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="collapse-content" id="day10">
+                    <div class="px-6 pb-5 border-t border-gray-100 pt-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-gray-600 mb-2">Schedule</div>
+                                <ul class="text-sm text-gray-600 space-y-1.5">
+                                    <li>10:00-11:00 Futures external (offline, JP) - takeda</li>
+                                    <li>13:30-14:30 US stock in-app (offline, JP) - tabata</li>
+                                    <li>15:00-16:00 High-AUM in-app (online, JP) - takeda</li>
+                                    <li>17:00-18:00 High-AUM in-app (online, JP) - tsubouchi</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-600 mb-2">Note</div>
+                                <p class="text-sm text-gray-600">Futures user barely trades futures; team pivoted to focus on general product & platform needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Insights Section -->
+<section id="insights" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-8">Core Insights</h2>
+
+        <div class="grid lg:grid-cols-2 gap-8 mb-12">
+            <!-- Competitive Advantages Chart -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Competitive Advantages (User Recognition)</h3>
+                <canvas id="advantagesChart" height="280"></canvas>
+            </div>
+
+            <!-- Cross-Sell Opportunity -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Cross-Sell Opportunity Matrix</h3>
+                <canvas id="crossSellChart" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- Product Shortcomings -->
+        <div class="mb-12">
+            <h3 class="text-lg font-semibold mb-4">Product Shortcomings by Priority</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="space-y-3">
+                    <div class="text-sm font-bold text-red-600 uppercase tracking-wider">P0 - Blockers</div>
+                    <div class="priority-p0 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">JP Stock Capability Gap</div>
+                        <p class="text-xs text-gray-500 mt-1">Order types, margin trading, PTS support lag behind US stock features</p>
+                    </div>
+                    <div class="priority-p0 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">Bank/Fund Flow Barrier</div>
+                        <p class="text-xs text-gray-500 mt-1">Rakuten/SBI ecosystem lock-in (deposit -> securities -> FX integrated)</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="text-sm font-bold text-amber-600 uppercase tracking-wider">P1 - High Impact</div>
+                    <div class="priority-p1 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">Account Experience</div>
+                        <p class="text-xs text-gray-500 mt-1">Cannot separate long/short-term holdings; margin vs cash account inconsistency</p>
+                    </div>
+                    <div class="priority-p1 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">Trust Deficit</div>
+                        <p class="text-xs text-gray-500 mt-1">New brand + China background -> user hesitation. NISA transfer resistance</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="text-sm font-bold text-blue-600 uppercase tracking-wider">P2 - Improvements</div>
+                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">Feature Discoverability</div>
+                        <p class="text-xs text-gray-500 mt-1">Screener location changed, advanced features need education</p>
+                    </div>
+                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="font-medium text-sm">Fractional Trading</div>
+                        <p class="text-xs text-gray-500 mt-1">No real-time fractional trading causes fund outflow</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Quotes -->
+        <div>
+            <h3 class="text-lg font-semibold mb-4">Key User Voices</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"絶対にベスト" (Absolutely the best)</p>
+                    <p class="text-xs text-gray-500">Day 6 -- In-app JP stock user, on moomoo UI/UX</p>
+                </div>
+                <div class="bg-gradient-to-br from-red-50 to-pink-50 border border-red-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"If 2nd broker overlaps with SBI, there's no reason to use it. What's clearly different?"</p>
+                    <p class="text-xs text-gray-500">Day 8 -- External user, on differentiation</p>
+                </div>
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"Recommending a trading app is risky -- it involves money, investment losses, personal responsibility"</p>
+                    <p class="text-xs text-gray-500">Day 6 -- On referral difficulty in Japan</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"Use moomoo for speculation; keep long-term allocation at other brokers"</p>
+                    <p class="text-xs text-gray-500">Day 6 -- Observed user behavior pattern</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"As long as money sits in moomoo, it earns interest" -- strongest message to propagate</p>
+                    <p class="text-xs text-gray-500">Day 6 -- Product team insight on MRF/MMF</p>
+                </div>
+                <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl p-5">
+                    <p class="text-sm italic text-gray-700 mb-3">"Mixing long-term and short-term holdings makes me unable to resist touching the long-term positions"</p>
+                    <p class="text-xs text-gray-500">Day 6 -- On account separation need</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Recommendations Section -->
+<section id="recommendations" class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-8">Product Recommendations</h2>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- P0 Column -->
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-4 h-4 rounded bg-red-500"></div>
+                    <h3 class="font-bold text-red-700">P0 Must Build</h3>
+                    <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Blocking</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="priority-p0 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">1. JP Stock Margin Trading</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>General margin + institutional margin support</li>
+                            <li>Margin order UX aligned with cash orders</li>
+                            <li>Competitive margin interest rates</li>
+                            <li>Cash delivery / stock delivery functions</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p0 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">2. JP Stock Order Capability</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>IFDOCO compound orders</li>
+                            <li>Simultaneous TP/SL setting</li>
+                            <li>MOC (market-on-close) orders</li>
+                            <li>PTS orders</li>
+                            <li>Trailing Stop (already exists = selling point)</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p0 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">3. PTS Night Trading</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>Active traders: essential risk management tool</li>
+                            <li>Long-term investors: nice-to-have</li>
+                            <li>Priority: ensure market-watching capability first</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- P1 Column -->
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-4 h-4 rounded bg-amber-500"></div>
+                    <h3 class="font-bold text-amber-700">P1 Strongly Recommended</h3>
+                    <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">High Impact</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="priority-p1 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">4. Idle Cash Interest (MRF/MMF/Cash Sweep)</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>All users expressed strong interest</li>
+                            <li>"Money earns interest just by being in moomoo" = viral message</li>
+                            <li>Explore bank partnerships (Minano: 0.5-0.6%)</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p1 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">5. Account Separation / Portfolio Mgmt</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>Long-term vs short-term "bucket" concept</li>
+                            <li>Cross-broker asset aggregation</li>
+                            <li>Calendar-style P&L visualization</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p1 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">6. Feature Education & Discoverability</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>AI help window for guidance</li>
+                            <li>Contextual order type education</li>
+                            <li>"Live / Coming soon" labels</li>
+                            <li>Screener position optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- P2 Column -->
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-4 h-4 rounded bg-blue-500"></div>
+                    <h3 class="font-bold text-blue-700">P2 Worth Exploring</h3>
+                    <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Opportunity</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="priority-p2 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">7. FX Copy Trading</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>FX beginners expressed strong interest</li>
+                            <li>Expandable to stock trading</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p2 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">8. AI Decision Support</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>Not auto-trading; AI/chat portfolio advice</li>
+                            <li>AI chart comparison</li>
+                            <li>Accuracy is trust threshold</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p2 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">9. PC TradingView-Level Charts</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>Active FX traders: strong demand</li>
+                            <li>Multi-panel, draw-to-order</li>
+                        </ul>
+                    </div>
+                    <div class="priority-p2 bg-white rounded-lg p-5 shadow-sm">
+                        <h4 class="font-semibold text-sm mb-2">10. Shareholder Benefits (株主優待)</h4>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>Important for JP stock investors</li>
+                            <li>Search/filter/dividend ranking integration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Low Priority -->
+                <div class="mt-6 bg-gray-100 rounded-lg p-4">
+                    <div class="text-xs font-bold text-gray-500 uppercase mb-2">Low Priority</div>
+                    <ul class="text-xs text-gray-500 space-y-1">
+                        <li>Event Contracts: no natural demand</li>
+                        <li>Crypto: some interest, not core</li>
+                        <li>More overseas markets: secondary to US/JP improvements</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Acquisition Strategy Section -->
+<section id="acquisition" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-8">Acquisition Strategy</h2>
+
+        <div class="grid lg:grid-cols-2 gap-8 mb-10">
+            <!-- Target x USP Matrix -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Target Segment x USP Matrix</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Target</th>
+                                <th class="px-4 py-3 text-left">Key USP</th>
+                                <th class="px-4 py-3 text-center">Feasibility</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-medium">Rakuten Users</td>
+                                <td class="px-4 py-3 text-gray-600">Order UX + Margin Rate + Info Tools</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs">Medium</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-100 bg-gray-50">
+                                <td class="px-4 py-3 font-medium">SBI Users</td>
+                                <td class="px-4 py-3 text-gray-600">Info Density + AI + Chart Experience</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs">Medium</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-medium">Monex Users</td>
+                                <td class="px-4 py-3 text-gray-600">UI/UX + US Stock Experience + Fees</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">High</span></td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="px-4 py-3 font-medium">FX Traders</td>
+                                <td class="px-4 py-3 text-gray-600">All-in-one + TV Charts + Copy Trading</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">High</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Switching Barriers -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Switching Barriers & Countermeasures</h3>
+                <div class="space-y-3">
+                    <div class="flex gap-4 items-start bg-gray-50 rounded-lg p-4">
+                        <div class="flex-shrink-0 w-24 text-xs font-medium text-red-600 bg-red-50 rounded px-2 py-1 text-center">NISA Transfer</div>
+                        <div class="text-sm text-gray-600">Smooth transfer experience + transfer-in bonus incentive</div>
+                    </div>
+                    <div class="flex gap-4 items-start bg-gray-50 rounded-lg p-4">
+                        <div class="flex-shrink-0 w-24 text-xs font-medium text-red-600 bg-red-50 rounded px-2 py-1 text-center">Bank Ecosystem</div>
+                        <div class="text-sm text-gray-600">Explore bank partnerships (Minano etc.) + Cash Sweep feature</div>
+                    </div>
+                    <div class="flex gap-4 items-start bg-gray-50 rounded-lg p-4">
+                        <div class="flex-shrink-0 w-24 text-xs font-medium text-amber-600 bg-amber-50 rounded px-2 py-1 text-center">Multi-Broker</div>
+                        <div class="text-sm text-gray-600">Portfolio aggregation + "2nd broker" positioning first</div>
+                    </div>
+                    <div class="flex gap-4 items-start bg-gray-50 rounded-lg p-4">
+                        <div class="flex-shrink-0 w-24 text-xs font-medium text-amber-600 bg-amber-50 rounded px-2 py-1 text-center">Feature Gap</div>
+                        <div class="text-sm text-gray-600">Clearly communicate differentiation (don't overlap with SBI)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Building -->
+        <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl p-6 text-white">
+            <h3 class="text-lg font-semibold mb-4">Trust Building in Japan</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <div class="text-sm font-medium text-orange-300 mb-2">Brand Background</div>
+                    <p class="text-sm text-gray-300">Users know/suspect "Chinese company" -> Reinforce "JP legal entity + JP compliance + NASDAQ listed"</p>
+                </div>
+                <div>
+                    <div class="text-sm font-medium text-orange-300 mb-2">Channel Strategy</div>
+                    <p class="text-sm text-gray-300">OOH & physical stores more effective than referrals in Japan</p>
+                </div>
+                <div>
+                    <div class="text-sm font-medium text-orange-300 mb-2">Referral Reality</div>
+                    <p class="text-sm text-gray-300">Culturally difficult: involves money/losses/personal responsibility -> Soft promotion more effective</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-400 py-10">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-8">
+            <div>
+                <h4 class="font-semibold text-white mb-3">Data Limitations</h4>
+                <ul class="text-sm space-y-1.5">
+                    <li>Based on group chat Quick Notes and real-time discussions, not verbatim transcripts</li>
+                    <li>Week 1 (Day 1-4) structured summaries are less detailed</li>
+                    <li>Feishu meeting recordings could not be directly accessed</li>
+                    <li>Report generated: 2026-04-24</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-3">Suggested Next Steps</h4>
+                <ul class="text-sm space-y-1.5">
+                    <li>1. Supplement Week 1 detailed Quick Notes (4/13-4/16)</li>
+                    <li>2. Re-slice analysis by user persona</li>
+                    <li>3. Quantify priorities (ICE/RICE scoring)</li>
+                    <li>4. Align with competitor capability gap analysis</li>
+                    <li>5. Continue tracking ongoing interviews</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-6 text-center text-xs text-gray-500">
+            moomoo JP Market Research Team | Internal Use Only | Generated 2026-04-27
+        </div>
+    </div>
+</footer>
+
+<script>
+// Collapse/Expand functionality
+function toggleCollapse(id) {
+    const content = document.getElementById(id);
+    const arrow = document.getElementById('arrow-' + id);
+    content.classList.toggle('open');
+    if (content.classList.contains('open')) {
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// Competitive Advantages Chart
+const advantagesCtx = document.getElementById('advantagesChart').getContext('2d');
+new Chart(advantagesCtx, {
+    type: 'bar',
+    data: {
+        labels: ['UI/UX', 'Info Density', 'US Stock Trading', 'AI Features', 'All-in-One', 'Promotions', 'Advanced Orders', 'Calendar P&L', 'Fund Flow Tracking'],
+        datasets: [{
+            label: 'Mention Frequency (days)',
+            data: [8, 4, 3, 2, 2, 1, 1, 1, 1],
+            backgroundColor: [
+                'rgba(249, 115, 22, 0.8)',
+                'rgba(249, 115, 22, 0.7)',
+                'rgba(249, 115, 22, 0.6)',
+                'rgba(249, 115, 22, 0.5)',
+                'rgba(249, 115, 22, 0.45)',
+                'rgba(249, 115, 22, 0.4)',
+                'rgba(249, 115, 22, 0.35)',
+                'rgba(249, 115, 22, 0.3)',
+                'rgba(249, 115, 22, 0.25)'
+            ],
+            borderColor: 'rgba(249, 115, 22, 1)',
+            borderWidth: 1,
+            borderRadius: 4
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 10,
+                title: { display: true, text: 'Days Mentioned' }
+            }
+        }
+    }
+});
+
+// Cross-Sell Opportunity Chart
+const crossSellCtx = document.getElementById('crossSellChart').getContext('2d');
+new Chart(crossSellCtx, {
+    type: 'bar',
+    data: {
+        labels: ['US -> JP Stock', 'JP -> US Stock', 'Stock -> US Options', 'FX -> Stock/Options', 'Stock -> Crypto', 'Event Contracts'],
+        datasets: [{
+            label: 'Opportunity Rating',
+            data: [4, 4, 3, 3, 2, 1],
+            backgroundColor: [
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(156, 163, 175, 0.6)',
+                'rgba(156, 163, 175, 0.4)'
+            ],
+            borderColor: [
+                'rgba(16, 185, 129, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(156, 163, 175, 1)',
+                'rgba(156, 163, 175, 1)'
+            ],
+            borderWidth: 1,
+            borderRadius: 4
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return '★'.repeat(context.raw) + '☆'.repeat(5 - context.raw);
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 5,
+                ticks: {
+                    callback: function(value) { return '★'.repeat(value); }
+                },
+                title: { display: true, text: 'Rating (5 = Highest)' }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
