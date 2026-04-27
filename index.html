@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP Market User Interview Dashboard | moomoo</title>
+    <title>JP Market User Research Dashboard | moomoo证券</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans SC', sans-serif; }
         .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
-        .collapse-content.open { max-height: 8000px; transition: max-height 0.6s ease-in; }
+        .collapse-content.open { max-height: 12000px; transition: max-height 0.6s ease-in; }
         .bar { transition: width 0.5s ease; }
         .priority-p0 { border-left: 4px solid #ef4444; }
         .priority-p1 { border-left: 4px solid #f59e0b; }
         .priority-p2 { border-left: 4px solid #3b82f6; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans SC', sans-serif; }
         .nav-link:hover { background: rgba(255,255,255,0.1); }
         .card-hover:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -5px rgba(0,0,0,0.08); }
         .card-hover { transition: all 0.15s; }
         [data-lang="zh"] .en, [data-lang="en"] .zh { display: none; }
         .lang-btn.active { background: #f97316; color: white; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+        .tag-jp { background: #dbeafe; color: #1e40af; }
+        .tag-us { background: #dcfce7; color: #166534; }
+        .tag-fx { background: #fef3c7; color: #92400e; }
+        .tag-futures { background: #f3e8ff; color: #6b21a8; }
+        .tag-mm { background: #e0e7ff; color: #3730a3; }
+        .tag-non { background: #f1f5f9; color: #475569; }
+        .quote-box { border-left: 3px solid #f97316; background: #fff7ed; padding: 8px 12px; font-style: italic; font-size: 0.85rem; margin: 6px 0; }
+        .metric-ring { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.3rem; }
+        .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb; }
+        .freq-bar { height: 22px; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.75rem; font-weight: 600; color: white; min-width: 30px; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800" data-lang="en">
+<body class="bg-gray-50 text-gray-800" data-lang="zh">
 
 <!-- Navigation -->
 <nav class="bg-gray-900 text-white sticky top-0 z-50 shadow-lg">
@@ -28,1182 +39,843 @@
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-sm">m</div>
             <h1 class="text-lg font-semibold">
-                <span class="en">JP User Interview Dashboard</span>
-                <span class="zh">JP 用户访谈 Dashboard</span>
+                <span class="en">JP User Research Dashboard</span>
+                <span class="zh">JP 用户研究 Dashboard</span>
             </h1>
         </div>
         <div class="flex items-center gap-4">
             <div class="hidden md:flex gap-1 text-sm">
-                <a href="#overview" class="nav-link px-3 py-1.5 rounded">
-                    <span class="en">Overview</span><span class="zh">概览</span>
-                </a>
-                <a href="#timeline" class="nav-link px-3 py-1.5 rounded">
-                    <span class="en">Timeline</span><span class="zh">时间线</span>
-                </a>
-                <a href="#insights" class="nav-link px-3 py-1.5 rounded">
-                    <span class="en">Insights</span><span class="zh">洞察</span>
-                </a>
-                <a href="#recommendations" class="nav-link px-3 py-1.5 rounded">
-                    <span class="en">Recs</span><span class="zh">建议</span>
-                </a>
-                <a href="#acquisition" class="nav-link px-3 py-1.5 rounded">
-                    <span class="en">Acquisition</span><span class="zh">获客</span>
-                </a>
+                <a href="#overview" class="nav-link px-3 py-1.5 rounded"><span class="en">Overview</span><span class="zh">概览</span></a>
+                <a href="#timeline" class="nav-link px-3 py-1.5 rounded"><span class="en">Timeline</span><span class="zh">时间线</span></a>
+                <a href="#insights" class="nav-link px-3 py-1.5 rounded"><span class="en">Insights</span><span class="zh">洞察</span></a>
+                <a href="#recommendations" class="nav-link px-3 py-1.5 rounded"><span class="en">Product</span><span class="zh">产品建议</span></a>
+                <a href="#acquisition" class="nav-link px-3 py-1.5 rounded"><span class="en">GTM</span><span class="zh">获客策略</span></a>
             </div>
-            <!-- Language Toggle -->
-            <div class="flex bg-gray-700 rounded-lg p-0.5 text-xs">
-                <button onclick="setLang('en')" class="lang-btn px-2.5 py-1 rounded active" id="btn-en">EN</button>
-                <button onclick="setLang('zh')" class="lang-btn px-2.5 py-1 rounded" id="btn-zh">CN</button>
+            <div class="flex gap-1 border border-gray-600 rounded-lg p-0.5">
+                <button onclick="setLang('zh')" class="lang-btn px-2.5 py-1 rounded text-xs active">CN</button>
+                <button onclick="setLang('en')" class="lang-btn px-2.5 py-1 rounded text-xs">EN</button>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- Hero / Overview -->
-<section id="overview" class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-14">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold mb-2">
-                <span class="en">JP Market User Research</span>
-                <span class="zh">JP 市场用户研究</span>
-            </h2>
-            <p class="text-gray-400">
-                <span class="en">April 2026 Product-side Research - Comprehensive Analysis</span>
-                <span class="zh">2026年4月 用研做货侧 - 综合分析</span>
-            </p>
-        </div>
-
-        <!-- Key Metrics -->
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">
-            <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                <div class="text-3xl font-bold text-orange-400">31+</div>
-                <div class="text-xs text-gray-300 mt-1">
-                    <span class="en">Total Sessions</span><span class="zh">总访谈场次</span>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                <div class="text-3xl font-bold text-blue-400">11</div>
-                <div class="text-xs text-gray-300 mt-1">
-                    <span class="en">Research Days</span><span class="zh">研究天数</span>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                <div class="text-3xl font-bold text-green-400">4/13-27</div>
-                <div class="text-xs text-gray-300 mt-1">
-                    <span class="en">Period</span><span class="zh">研究周期</span>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                <div class="text-3xl font-bold text-purple-400">4</div>
-                <div class="text-xs text-gray-300 mt-1">
-                    <span class="en">User Segments</span><span class="zh">用户分群</span>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                <div class="text-3xl font-bold text-pink-400">
-                    <span class="en">Tokyo</span><span class="zh">东京</span>
-                </div>
-                <div class="text-xs text-gray-300 mt-1">
-                    <span class="en">Offline + Online</span><span class="zh">线下面对面+线上</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- User Segments -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
-                    <span class="font-semibold text-emerald-300 text-sm">
-                        <span class="en">In-App Active</span><span class="zh">站内活跃客户</span>
-                    </span>
-                </div>
-                <p class="text-xs text-gray-300">
-                    <span class="en">moomoo existing US/JP stock traders</span>
-                    <span class="zh">已使用 moomoo 的美股/日股交易者</span>
-                </p>
-            </div>
-            <div class="bg-violet-500/20 border border-violet-500/30 rounded-xl p-4">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <div class="w-2.5 h-2.5 rounded-full bg-violet-400"></div>
-                    <span class="font-semibold text-violet-300 text-sm">
-                        <span class="en">External Active</span><span class="zh">站外活跃交易者</span>
-                    </span>
-                </div>
-                <p class="text-xs text-gray-300">
-                    <span class="en">Rakuten / SBI / Monex / GMO users</span>
-                    <span class="zh">乐天/SBI/Monex/GMO/松井用户</span>
-                </p>
-            </div>
-            <div class="bg-orange-500/20 border border-orange-500/30 rounded-xl p-4">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <div class="w-2.5 h-2.5 rounded-full bg-orange-400"></div>
-                    <span class="font-semibold text-orange-300 text-sm">
-                        <span class="en">FX Traders</span><span class="zh">FX 交易者</span>
-                    </span>
-                </div>
-                <p class="text-xs text-gray-300">
-                    <span class="en">Leveraged FX traders (in/external)</span>
-                    <span class="zh">站内外杠杆式外汇用户</span>
-                </p>
-            </div>
-            <div class="bg-pink-500/20 border border-pink-500/30 rounded-xl p-4">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <div class="w-2.5 h-2.5 rounded-full bg-pink-400"></div>
-                    <span class="font-semibold text-pink-300 text-sm">
-                        <span class="en">High-AUM</span><span class="zh">大客户</span>
-                    </span>
-                </div>
-                <p class="text-xs text-gray-300">
-                    <span class="en">High-value in-app clients</span>
-                    <span class="zh">高资产站内客户</span>
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Timeline Section -->
-<section id="timeline" class="py-10">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-2">
-            <span class="en">Interview Timeline</span><span class="zh">访谈时间线</span>
+<!-- SECTION: Overview -->
+<section id="overview" class="max-w-7xl mx-auto px-4 py-8">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-1">
+            <span class="en">Research Overview</span><span class="zh">研究概览</span>
         </h2>
-        <p class="text-gray-500 text-sm mb-6">
-            <span class="en">Click each day to expand findings</span>
-            <span class="zh">点击展开每日详情</span>
+        <p class="text-gray-500 text-sm">
+            <span class="en">2026 JP Business Planning - Core User Research (Apr 13-24, 2026)</span>
+            <span class="zh">2026 JP BP 核心用户研究（2026年4月13日-24日）</span>
         </p>
+    </div>
 
-        <div class="space-y-2" id="timeline-container">
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-orange-600">27</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">Total Sessions</span><span class="zh">总访谈场次</span></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-blue-600">10</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">Research Days</span><span class="zh">研究天数</span></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-green-600">~30h</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">Total Duration</span><span class="zh">总时长</span></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-purple-600">5</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">User Segments</span><span class="zh">用户分群</span></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-red-600">15</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">MM Users</span><span class="zh">站内用户</span></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div class="text-3xl font-bold text-gray-600">12</div>
+            <div class="text-xs text-gray-500 mt-1"><span class="en">Non-MM Users</span><span class="zh">站外用户</span></div>
+        </div>
+    </div>
 
-            <!-- Day 1-4 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d14')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/13-16</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 1-4: Kickoff Phase</span>
-                            <span class="zh">Day 1-4: 启动阶段</span>
-                        </span>
-                        <span class="text-xs text-gray-400">10 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d14">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 text-sm text-gray-600">
-                        <p class="en">First interviewee: Futures in-app user, male 41-50yo, cross-trader (JP/US/Futures), uses SBI/Monex/GMO, non-NISA AUM 50M+ JPY, PC+Desktop user.</p>
-                        <p class="zh">首位受访者：期货站内用户，男性 41-50 岁，日股/美股/期货交叉交易者，使用 SBI/Monex/GMO，NISA 外资产 5000万+ 日元。</p>
-                        <div class="mt-2 grid grid-cols-4 gap-2 text-xs text-gray-500">
-                            <span>4/13: 2 sessions</span><span>4/14: 2 sessions</span><span>4/15: 4(+1)</span><span>4/16: 2 sessions</span>
-                        </div>
-                    </div>
+    <!-- Segment Breakdown -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold mb-4"><span class="en">User Segments</span><span class="zh">用户分群</span></h3>
+        <div class="grid md:grid-cols-5 gap-3">
+            <div class="border rounded-lg p-3 text-center">
+                <span class="tag tag-jp">JP Stock</span>
+                <div class="text-2xl font-bold mt-2">11</div>
+                <div class="text-xs text-gray-500"><span class="en">JP equity traders</span><span class="zh">日本股票交易者</span></div>
+            </div>
+            <div class="border rounded-lg p-3 text-center">
+                <span class="tag tag-us">US Stock</span>
+                <div class="text-2xl font-bold mt-2">5</div>
+                <div class="text-xs text-gray-500"><span class="en">US equity traders</span><span class="zh">美股交易者</span></div>
+            </div>
+            <div class="border rounded-lg p-3 text-center">
+                <span class="tag tag-fx">FX</span>
+                <div class="text-2xl font-bold mt-2">7</div>
+                <div class="text-xs text-gray-500"><span class="en">FX traders</span><span class="zh">外汇交易者</span></div>
+            </div>
+            <div class="border rounded-lg p-3 text-center">
+                <span class="tag tag-futures">Futures</span>
+                <div class="text-2xl font-bold mt-2">2</div>
+                <div class="text-xs text-gray-500"><span class="en">Futures/CFD traders</span><span class="zh">期货/CFD交易者</span></div>
+            </div>
+            <div class="border rounded-lg p-3 text-center">
+                <span class="tag tag-non">Multi-asset</span>
+                <div class="text-2xl font-bold mt-2">2</div>
+                <div class="text-xs text-gray-500"><span class="en">Diversified investors</span><span class="zh">多资产投资者</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Format -->
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+        <h3 class="font-bold mb-3"><span class="en">Research Format</span><span class="zh">研究形式</span></h3>
+        <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div>
+                <span class="font-semibold"><span class="en">Method:</span><span class="zh">方法：</span></span>
+                <span class="en">1-on-1 semi-structured interviews (60-90min)</span>
+                <span class="zh">1对1半结构化深度访谈（60-90分钟）</span>
+            </div>
+            <div>
+                <span class="font-semibold"><span class="en">Format:</span><span class="zh">形式：</span></span>
+                <span class="en">In-person (Shibuya office) + Online (Zoom)</span>
+                <span class="zh">线下（涉谷办公室）+ 线上（Zoom）</span>
+            </div>
+            <div>
+                <span class="font-semibold"><span class="en">Languages:</span><span class="zh">语言：</span></span>
+                <span class="en">Japanese (primary), Chinese (2 sessions)</span>
+                <span class="zh">日语（主要）、中文（2场）</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PLACEHOLDER: Timeline section will be added -->
+<section id="timeline" class="max-w-7xl mx-auto px-4 py-8">
+    <h2 class="section-title"><span class="en">Interview Timeline</span><span class="zh">访谈时间线</span></h2>
+    <p class="text-sm text-gray-500 mb-6"><span class="en">Click each day to expand interview details</span><span class="zh">点击展开每日访谈详情</span></p>
+
+    <!-- Day 1: Apr 13 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 13</div>
+                <div class="font-semibold"><span class="en">Day 1 - 3 Sessions</span><span class="zh">第1天 - 3场</span></div>
+                <span class="tag tag-jp">JP Stock</span><span class="tag tag-us">US Stock</span><span class="tag tag-futures">Futures</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">Online, 1h05m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Active JP stock swing trader. <b>Key finding:</b> Loves moomoo's real-time data quality, wants JP stock margin trading and credit account features.</span><span class="zh"><b>画像：</b>活跃日股swing交易者。<b>核心发现：</b>高度认可moomoo实时行情质量，强烈需要日股信用取引功能。</span></p>
+                    <div class="quote-box"><span class="en">"The real-time data quality is noticeably better than SBI"</span><span class="zh">"实时行情的质量明显比SBI好"</span></div>
+                </div>
+                <div class="border-l-4 border-green-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-us">US Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">Online, 1h12m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> US stock focused, uses moomoo as primary. <b>Key finding:</b> Wants more flexible conditional orders for US stocks; praises 24h trading and low fees.</span><span class="zh"><b>画像：</b>美股为主，moomoo主力账户。<b>核心发现：</b>希望美股更灵活的条件单；高度认可24小时交易和低手续费。</span></p>
+                    <div class="quote-box"><span class="en">"24-hour trading is a game changer for my schedule"</span><span class="zh">"24小时交易对我的时间安排来说是革命性的"</span></div>
+                </div>
+                <div class="border-l-4 border-purple-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-futures">Futures</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">Online, 1h18m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Futures/options trader, technically advanced. <b>Key finding:</b> Needs multi-window detachable panels on desktop; wants TradingView integration; considers moomoo desktop too confined.</span><span class="zh"><b>画像：</b>期货/期权交易者，技术能力强。<b>核心发现：</b>需要桌面端多窗口可拆分面板；需要TradingView集成；认为moomoo桌面端过于封闭。</span></p>
+                    <div class="quote-box"><span class="en">"I need to detach windows and put them on different monitors"</span><span class="zh">"我需要把窗口拆出来放到不同显示器上"</span></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 5 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d5')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/17</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 5: In-App JP Stock + External FX</span>
-                            <span class="zh">Day 5: 站内日股 + 站外FX</span>
-                        </span>
-                        <span class="text-xs text-gray-400">3 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d5">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <div class="font-semibold text-red-600 text-xs mb-1.5 uppercase">
-                                <span class="en">Key Findings</span><span class="zh">关键发现</span>
-                            </div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">Real-time fractional trading blocks migration</li>
-                                <li class="en">MRF/MMF demand is strong across all users</li>
-                                <li class="en">Advanced features need education (AI help window)</li>
-                                <li class="en">Event contracts: low priority, seen as "gambling"</li>
-                                <li class="zh">实时零股交易是迁移阻碍</li>
-                                <li class="zh">MRF/MMF 需求强烈（所有受访者）</li>
-                                <li class="zh">高级功能需要教育（建议 AI 帮助窗口）</li>
-                                <li class="zh">事件合约优先级低，被视为"赌博"</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-blue-600 text-xs mb-1.5 uppercase">
-                                <span class="en">Highlights</span><span class="zh">亮点</span>
-                            </div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">IT company user interested in moomoo API</li>
-                                <li class="en">User accidentally bought 100K JPY MMF (UI issue)</li>
-                                <li class="zh">IT 公司用户对 moomoo API 感兴趣</li>
-                                <li class="zh">用户误购 10万日元 MMF（界面未区分上线/未上线功能）</li>
-                            </ul>
-                        </div>
-                    </div>
+    <!-- Day 2: Apr 14 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 14</div>
+                <div class="font-semibold"><span class="en">Day 2 - 1 Session</span><span class="zh">第2天 - 1场</span></div>
+                <span class="tag tag-fx">FX</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, 1h25m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Chinese national in Japan, professional FX day trader (500x leverage overseas), uses TradingView for charting. <b>Key finding:</b> moomoo must offer tight spreads (USD/JPY 0.2 pip level), rich currency pairs, and TradingView-level charting tools to compete in FX.</span><span class="zh"><b>画像：</b>在日华人，全职FX交易员（海外500倍杠杆），用TradingView看盘。<b>核心发现：</b>moomoo做FX必须提供极低点差（USD/JPY 0.2水平）、丰富货币对、达到TradingView级别的画线工具。</span></p>
+                    <div class="quote-box"><span class="en">"Japanese FX brokers have the tightest spreads globally but their UI is terrible"</span><span class="zh">"日本FX券商的点差全球最低，但界面非常丑"</span></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 6 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d6')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/20</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 6: In-App JP Stock Users</span>
-                            <span class="zh">Day 6: 站内日股用户</span>
-                        </span>
-                        <span class="text-xs text-gray-400">2 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d6">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <div class="font-semibold text-red-600 text-xs mb-1.5 uppercase">Key Findings</div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">Account separation ("bucket") = strongest product demand</li>
-                                <li class="en">Cross-broker portfolio aggregation is pain point</li>
-                                <li class="en">JP stock orders should align with US stock level</li>
-                                <li class="zh">账户分离("桶"概念)是最强产品需求</li>
-                                <li class="zh">跨券商 Portfolio 聚合是痛点</li>
-                                <li class="zh">日股订单应对齐美股水平</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-blue-600 text-xs mb-1.5 uppercase">Highlights</div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">One interviewee = former Monex employee</li>
-                                <li class="en">One = heavy crypto player</li>
-                                <li class="zh">一位是前 Monex 员工</li>
-                                <li class="zh">一位是重度加密货币玩家</li>
-                            </ul>
-                            <div class="mt-2 bg-orange-50 border border-orange-200 rounded p-2">
-                                <p class="text-xs italic text-orange-800">"絶対にベスト" (Absolutely the best) -- on UI/UX</p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Day 3: Apr 15 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 15</div>
+                <div class="font-semibold"><span class="en">Day 3 - 3 Sessions</span><span class="zh">第3天 - 3场</span></div>
+                <span class="tag tag-jp">JP Stock</span><span class="tag tag-fx">FX</span><span class="tag tag-futures">Futures</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h10m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> SBI primary user, dividend-focused. <b>Key finding:</b> Impressed by moomoo's information density; considers it "more advanced than SBI" but inertia + ecosystem lock keeps him at SBI.</span><span class="zh"><b>画像：</b>SBI主力用户，配当重視。<b>核心发现：</b>对moomoo信息密度印象深刻，认为"比SBI更高级"，但惰性和生态锁定让他留在SBI。</span></p>
+                </div>
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h05m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Part-time FX trader using domestic broker. <b>Key finding:</b> Needs 1000-unit minimum lot, wants moomoo to provide expert commentary/podcast within app for FX.</span><span class="zh"><b>画像：</b>兼职FX交易者，使用国内券商。<b>核心发现：</b>需要1000通货最小交易单位，希望moomoo在app内提供专家解读/播客。</span></p>
+                </div>
+                <div class="border-l-4 border-purple-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-futures">Futures</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">Online, 55m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Nikkei 225 futures trader (IG Securities). <b>Key finding:</b> Wants knock-out options and Nikkei index futures; moomoo's stock analysis tools are attractive as add-on value.</span><span class="zh"><b>画像：</b>日经225期货交易者（IG Securities）。<b>核心发现：</b>想要Knock-out期权和日经指数期货；moomoo的股票分析工具作为附加价值很有吸引力。</span></p>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 7 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d7')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/21</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 7: In-App US + External JP Stock</span>
-                            <span class="zh">Day 7: 站内美股 + 站外日股</span>
-                        </span>
-                        <span class="text-xs text-gray-400">2 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d7">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <div class="font-semibold text-red-600 text-xs mb-1.5 uppercase">Key Findings</div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">Stop-loss + entry automation = core need</li>
-                                <li class="en">Screener position changed, hard to find</li>
-                                <li class="en">Shareholder benefits important for JP investors</li>
-                                <li class="zh">止损+入场自动化是核心需求</li>
-                                <li class="zh">Screener 改版后难找</li>
-                                <li class="zh">株主優待对日股投资者重要</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-blue-600 text-xs mb-1.5 uppercase">Highlights</div>
-                            <p class="text-xs text-gray-600">
-                                <span class="en">External user described as <strong>"ideal TA archetype"</strong>. Uses SBI + Rakuten, trades ETF + crypto.</span>
-                                <span class="zh">站外用户被描述为<strong>"理想目标用户原型"</strong>。使用 SBI + 乐天，交易 ETF + 加密。</span>
-                            </p>
-                        </div>
-                    </div>
+    <!-- Day 4: Apr 16 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 16</div>
+                <div class="font-semibold"><span class="en">Day 4 - 2 Sessions</span><span class="zh">第4天 - 2场</span></div>
+                <span class="tag tag-us">US Stock</span><span class="tag tag-fx">FX</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-green-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-us">US Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, 1h15m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> High-net-worth investor, US stocks + bonds. <b>Key finding:</b> Wants US Treasury/corporate bond trading on moomoo; current competitor (IB/Nomura) charges high fees. Values moomoo's analyst data presentation.</span><span class="zh"><b>画像：</b>高净值投资者，美股+债券。<b>核心发现：</b>希望moomoo提供美国国债/公司债交易；当前竞品（IB/野村）费用高。高度认可moomoo的分析师数据呈现。</span></p>
+                </div>
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">Online, 1h02m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Young FX beginner using Rakuten. <b>Key finding:</b> Fears FX losses; wants educational content + demo trading with real feel; low-barrier entry (1000 units) is essential.</span><span class="zh"><b>画像：</b>年轻FX新手，使用乐天。<b>核心发现：</b>怕FX亏损；需要教育内容+有真实感的模拟交易；低门槛入场（1000通货单位）是必须的。</span></p>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 8 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d8')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/22</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 8: External JP Stock Users</span>
-                            <span class="zh">Day 8: 站外日股用户</span>
-                        </span>
-                        <span class="text-xs text-gray-400">3 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d8">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <div class="font-semibold text-red-600 text-xs mb-1.5 uppercase">Key Findings</div>
-                            <ul class="text-gray-600 space-y-1 text-xs">
-                                <li class="en">AI as Hook, but reliability is the challenge</li>
-                                <li class="en">Bank/fund flow = core switching barrier</li>
-                                <li class="en">Rakuten order UX is poor = moomoo opportunity</li>
-                                <li class="zh">AI 可做 Hook 但可靠性是挑战</li>
-                                <li class="zh">银行/资金流动是核心切换壁垒</li>
-                                <li class="zh">乐天下单 UX 差 = moomoo 机会</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-blue-600 text-xs mb-1.5 uppercase">User Quotes</div>
-                            <div class="space-y-2">
-                                <div class="bg-red-50 border border-red-200 rounded p-2">
-                                    <p class="text-xs italic text-red-800 en">"If 2nd broker overlaps with SBI, there's no reason to use it"</p>
-                                    <p class="text-xs italic text-red-800 zh">"如果第二家券商和 SBI 重叠，就没有使用理由"</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Day 5: Apr 17 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 17</div>
+                <div class="font-semibold"><span class="en">Day 5 - 3 Sessions</span><span class="zh">第5天 - 3场</span></div>
+                <span class="tag tag-jp">JP Stock</span><span class="tag tag-fx">FX</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, 1h24m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> HNW investor (85M yen portfolio), SBI primary, moomoo for US stocks. <b>Key finding:</b> "moomoo = US stocks" mental model is strong; doesn't know moomoo has JP stock features. Wants plain-language explanations for all features, MMF for idle cash, lending stock service.</span><span class="zh"><b>画像：</b>高净值投资者（8500万日元），SBI为主，moomoo做美股。<b>核心发现：</b>"moomoo=美股"心智模型很强；不知道moomoo有日股功能。需要所有功能的通俗解释、闲置资金MMF、貸株服务。</span></p>
+                    <div class="quote-box"><span class="en">"moomoo is US stocks in my head, SBI is JP stocks"</span><span class="zh">"在我脑子里moomoo就是美股，SBI就是日股"</span></div>
+                </div>
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, 1h18m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> IT professional, uses OpenD API, TradingView Pine Script. <b>Key finding:</b> #1 request is real-time fractional share execution; currently uses Rakuten specifically for this. Loves moomoo's trail stop and biometric auth. Wants Docker image for OpenD.</span><span class="zh"><b>画像：</b>IT从业者，使用OpenD API和TradingView Pine Script。<b>核心发现：</b>第一需求是实时单元未満株约定；目前专门为此用乐天。喜欢moomoo的trail stop和生体认证。想要OpenD Docker镜像。</span></p>
+                    <div class="quote-box"><span class="en">"Real-time fractional shares is the #1 thing I need. If moomoo had this, I'd consolidate everything here."</span><span class="zh">"实时单元未満株是我最需要的。如果moomoo有这个，我会把所有资产集中过来。"</span></div>
+                </div>
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h13m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> University student, Rakuten ecosystem user, FX (USD/JPY only). <b>Key finding:</b> Strongest positive reaction to global community feature ("never seen anywhere else"). Adoption barrier: no one around her uses moomoo (social proof deficit).</span><span class="zh"><b>画像：</b>大学生，乐天生态用户，FX仅做USD/JPY。<b>核心发现：</b>对全球社区功能反应最强烈（"从没在其他地方见过"）。使用障碍：身边没人用moomoo（缺乏社交证明）。</span></p>
+                    <div class="quote-box"><span class="en">"Very few people around me use moomoo. I choose based on word-of-mouth."</span><span class="zh">"我周围很少有人用moomoo。我是根据口碑来选择的。"</span></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 9 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d9')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/23</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 9: FX Users + External US Stock</span>
-                            <span class="zh">Day 9: FX 用户 + 站外美股</span>
-                        </span>
-                        <span class="text-xs text-gray-400">4 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d9">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 text-sm">
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <div class="font-semibold text-red-600 text-xs mb-1.5 uppercase">Key Findings</div>
-                                <ul class="text-gray-600 space-y-1 text-xs">
-                                    <li class="en">FX Copy Trading = major opportunity for beginners</li>
-                                    <li class="en">Local JP platform trust advantage exists</li>
-                                    <li class="en">TradingView-level charts required by active FX traders</li>
-                                    <li class="en">WHITE theme strongly demanded (dark UI = dealbreaker for some)</li>
-                                    <li class="en">Food/gourmet campaigns (JFX model) = high engagement for FX</li>
-                                    <li class="en">1000-unit min lot = key differentiator for FX beginners</li>
-                                    <li class="en">Physical store presence builds trust (SBI model)</li>
-                                    <li class="zh">FX 跟单交易对新手是重大机会</li>
-                                    <li class="zh">日本本土平台信任优势存在</li>
-                                    <li class="zh">活跃 FX 交易者需要 TradingView 级图表</li>
-                                    <li class="zh">白色主题强烈需求（深色 UI 对部分用户是 dealbreaker）</li>
-                                    <li class="zh">美食活动（JFX 模式）= FX 高参与度</li>
-                                    <li class="zh">1000 通货最小手数 = FX 新手关键差异化</li>
-                                    <li class="zh">实体店增加信任感（SBI 模式）</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-blue-600 text-xs mb-1.5 uppercase">
-                                    <span class="en">FX User Deep-Dive (Non-MM)</span><span class="zh">FX 用户深度访谈（非 MM 用户）</span>
-                                </div>
-                                <ul class="text-gray-600 space-y-1 text-xs">
-                                    <li class="en">Uses JFX + GMO Click; moo-chan mascot = positive brand impression</li>
-                                    <li class="en">Wants to move NISA to moomoo (currently SBI)</li>
-                                    <li class="en">Cross-collateral (FX margin from stock) = highly attractive</li>
-                                    <li class="en">In-app education content critical for FX beginners</li>
-                                    <li class="en">Swap point display + calendar view = expected standard</li>
-                                    <li class="zh">使用 JFX + GMO Click；moo-chan 吉祥物 = 正面品牌印象</li>
-                                    <li class="zh">想把 NISA 转到 moomoo（目前在 SBI）</li>
-                                    <li class="zh">跨品种担保（股票保证金做 FX）= 高吸引力</li>
-                                    <li class="zh">App 内教育内容对 FX 新手至关重要</li>
-                                    <li class="zh">Swap point 显示 + 日历视图 = 标配期待</li>
-                                </ul>
-                                <div class="mt-2 bg-green-50 border border-green-200 rounded p-2">
-                                    <p class="text-xs italic text-green-800 en">"White UI is a must. The dark theme feels intimidating for beginners."</p>
-                                    <p class="text-xs italic text-green-800 zh">"白色界面必须有。深色主题对新手有压迫感。"</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 flex-wrap mt-3">
-                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs">FX x3</span>
-                            <span class="px-2 py-0.5 bg-violet-100 text-violet-700 rounded text-xs">External US Stock x1</span>
-                        </div>
-                    </div>
+    <!-- Day 6: Apr 20 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 20</div>
+                <div class="font-semibold"><span class="en">Day 6 - 2 Sessions</span><span class="zh">第6天 - 2场</span></div>
+                <span class="tag tag-jp">JP Stock</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, AM</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Entrepreneur/cafe owner, technical trader (200/365 MA, RSI), 300-400 watchlist stocks, daily trading. <b>Key finding:</b> #1 pain is no OCO order for JP stocks (can do it for US stocks). Wants AI button on every analysis page. Would promote moomoo via his cafe business.</span><span class="zh"><b>画像：</b>创业者/咖啡店经营，技术派（200/365日均线、RSI），300-400支自选股，每日交易。<b>核心发现：</b>最大痛点是日股没有OCO注文（美股可以）。希望每个分析页面都有AI按钮。愿意通过咖啡店业务推广moomoo。</span></p>
+                    <div class="quote-box"><span class="en">"US stocks can set take-profit and stop-loss simultaneously. If JP stocks could do this too, it would be amazing."</span><span class="zh">"美股可以同时设止盈止损。日股也能做到的话就太好了。"</span></div>
+                </div>
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, PM</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> 2-year investor, swing trader (2wk-1mo hold), uses moomoo for short-term + SBI for long-term. <b>Key finding:</b> Wants sub-account separation (long-term vs short-term); "if this existed, I'd move everything to moomoo." Desktop chart display issues (MA labels hiding price).</span><span class="zh"><b>画像：</b>投资2年，swing交易（持仓2周-1月），moomoo做短线+SBI做长线。<b>核心发现：</b>最想要子账户分离（长期/短期）；"有这功能我就把所有资产搬到moomoo"。桌面端图表显示问题（均线标签遮挡价格）。</span></p>
+                    <div class="quote-box"><span class="en">"moomoo's UI is absolutely the best among all brokers. Especially for US stock trading, the UX is incredible."</span><span class="zh">"证券公司app里面moomoo绝对是最好的。尤其美股买卖的UX真的太好了。"</span></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 10 (Full Transcript Analysis) -->
-            <div class="bg-white rounded-xl shadow-sm card-hover border-l-4 border-orange-400">
-                <button onclick="toggle('d10')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-orange-100 text-orange-700 px-2.5 py-1 rounded">4/24</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 10: High-AUM + New User Deep-Dive</span>
-                            <span class="zh">Day 10: 大客户 + 新用户深度访谈</span>
-                        </span>
-                        <span class="text-xs text-gray-400">3 sessions (offline)</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d10">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 text-sm">
-                        <!-- User A: High-AUM US Stock -->
-                        <div class="mb-4 border border-pink-200 rounded-lg p-3 bg-pink-50/30">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-0.5 bg-pink-100 text-pink-700 rounded text-[10px] font-medium">High-AUM</span>
-                                <span class="text-xs font-semibold text-gray-700">
-                                    <span class="en">User A: US Stock Heavy Trader (90% AUM on moomoo)</span>
-                                    <span class="zh">用户 A：美股重度交易者（90% 资产在 moomoo）</span>
-                                </span>
-                            </div>
-                            <div class="grid md:grid-cols-2 gap-3">
-                                <div>
-                                    <div class="text-[10px] font-bold text-green-600 uppercase mb-1">Loves</div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">24h trading + low fees = primary reason to switch</li>
-                                        <li class="en">UI/chart quality far exceeds SBI/Rakuten</li>
-                                        <li class="en">Community feed (JP stock insights from other users)</li>
-                                        <li class="zh">24h 交易 + 低手续费 = 切换首要原因</li>
-                                        <li class="zh">UI/图表质量远超 SBI/乐天</li>
-                                        <li class="zh">社区动态（其他用户的日股分析）</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <div class="text-[10px] font-bold text-red-600 uppercase mb-1">Wants</div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">Korean stocks (SK Hynix etc.) - "めっちゃ欲しい"</li>
-                                        <li class="en">CSV export per ticker (NVDA trade history)</li>
-                                        <li class="en">Multi-currency purchase (buy US stock w/ JPY directly)</li>
-                                        <li class="en">India mutual funds access</li>
-                                        <li class="en">AI = less useful than X/Twitter AI for fast events</li>
-                                        <li class="zh">韩国股票（SK Hynix 等）- "超级想要"</li>
-                                        <li class="zh">按 ticker CSV 导出（如 NVDA 交易历史）</li>
-                                        <li class="zh">多币种买入（日元直接买美股）</li>
-                                        <li class="zh">印度投信访问</li>
-                                        <li class="zh">AI = 对快速行情不如 X/Twitter AI</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User B: High-AUM JP+US Stock -->
-                        <div class="mb-4 border border-red-200 rounded-lg p-3 bg-red-50/30">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-[10px] font-medium">CRITICAL</span>
-                                <span class="text-xs font-semibold text-gray-700">
-                                    <span class="en">User B: JP+US Stock High-AUM (Uses Monex for screener)</span>
-                                    <span class="zh">用户 B：日美股大客户（使用 Monex Screener 对比）</span>
-                                </span>
-                            </div>
-                            <div class="grid md:grid-cols-2 gap-3">
-                                <div>
-                                    <div class="text-[10px] font-bold text-red-600 uppercase mb-1">
-                                        <span class="en">P&L Bug (1 YEAR!)</span><span class="zh">P&L 缺陷（持续1年！）</span>
-                                    </div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">Daily P&L shows only $ amount, NOT % change</li>
-                                        <li class="en">User requested % display for over a year</li>
-                                        <li class="en">Makes daily performance tracking impossible</li>
-                                        <li class="en">Must open each stock individually to see %</li>
-                                        <li class="zh">日 P&L 仅显示金额，不显示百分比变化</li>
-                                        <li class="zh">用户反馈超过1年仍未修复</li>
-                                        <li class="zh">导致每日绩效追踪无法进行</li>
-                                        <li class="zh">必须逐个打开股票才能看到 %</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <div class="text-[10px] font-bold text-blue-600 uppercase mb-1">
-                                        <span class="en">Strategic Suggestion</span><span class="zh">战略建议</span>
-                                    </div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">MMF -> stock direct purchase = most wanted feature</li>
-                                        <li class="en">Wants US bonds (Treasury, Corporate)</li>
-                                        <li class="en">"moomoo should focus on US stocks + bonds, not JP stock competition"</li>
-                                        <li class="en">Monex screener still superior for JP stock filtering</li>
-                                        <li class="zh">MMF 直接买股票 = 最想要的功能</li>
-                                        <li class="zh">想要美国债券（国债、公司债）</li>
-                                        <li class="zh">"moomoo 应聚焦美股+债券，不要和日股竞争"</li>
-                                        <li class="zh">Monex screener 在日股筛选仍然领先</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User C: New Female User -->
-                        <div class="mb-4 border border-purple-200 rounded-lg p-3 bg-purple-50/30">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-[10px] font-medium">NEW USER</span>
-                                <span class="text-xs font-semibold text-gray-700">
-                                    <span class="en">User C: 1-month New User, Female, AUM 1 Oku+ (opened for 24h trading)</span>
-                                    <span class="zh">用户 C：入金1个月新用户，女性，资产1億+（为24h交易开户）</span>
-                                </span>
-                            </div>
-                            <div class="grid md:grid-cols-2 gap-3">
-                                <div>
-                                    <div class="text-[10px] font-bold text-amber-600 uppercase mb-1">
-                                        <span class="en">UI Pain Points</span><span class="zh">UI 痛点</span>
-                                    </div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">Coupon/MyPage hidden deep in menu hierarchy</li>
-                                        <li class="en">News section hard to find and navigate</li>
-                                        <li class="en">Asset overview inferior to Rakuten/SBI (can't see at a glance)</li>
-                                        <li class="en">Push notifications for price alerts inconsistent</li>
-                                        <li class="zh">优惠券/我的页面藏在深层菜单</li>
-                                        <li class="zh">新闻区难以找到和浏览</li>
-                                        <li class="zh">资产总览不如乐天/SBI（无法一目了然）</li>
-                                        <li class="zh">价格提醒推送不稳定</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <div class="text-[10px] font-bold text-blue-600 uppercase mb-1">
-                                        <span class="en">Interests & Behavior</span><span class="zh">兴趣与行为</span>
-                                    </div>
-                                    <ul class="text-gray-600 space-y-0.5 text-xs">
-                                        <li class="en">Uses ChatGPT/Gemini for stock picks (not moomoo AI)</li>
-                                        <li class="en">Interested in: Trailing Stop, Options education, US IPOs</li>
-                                        <li class="en">Rakuten/SBI ecosystem lock-in (points, bank, credit card)</li>
-                                        <li class="en">Would consider NISA transfer if moomoo adds JP stock margin</li>
-                                        <li class="zh">用 ChatGPT/Gemini 选股（非 moomoo AI）</li>
-                                        <li class="zh">感兴趣：追踪止损、期权教育、美股 IPO</li>
-                                        <li class="zh">乐天/SBI 生态锁定（积分、银行、信用卡）</li>
-                                        <li class="zh">如果 moomoo 加日股信用交易会考虑转 NISA</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Strategic Insights Box -->
-                        <div class="bg-blue-50 border border-blue-200 rounded p-2.5">
-                            <p class="text-xs text-blue-800 mb-1">
-                                <span class="en"><strong>Day 10 Key Takeaways:</strong></span>
-                                <span class="zh"><strong>Day 10 关键结论：</strong></span>
-                            </p>
-                            <ul class="text-xs text-blue-700 space-y-0.5">
-                                <li class="en">1. P&L % display = P0 fix (affects retention of high-value users)</li>
-                                <li class="en">2. MMF direct purchase = strongest cross-sell enabler</li>
-                                <li class="en">3. New user onboarding UX needs work (hidden features, confusing navigation)</li>
-                                <li class="en">4. External AI (ChatGPT/Gemini/X) preferred over in-app AI for stock research</li>
-                                <li class="zh">1. P&L % 显示 = P0 修复（影响高价值用户留存）</li>
-                                <li class="zh">2. MMF 直接购买 = 最强 Cross-Sell 推动力</li>
-                                <li class="zh">3. 新用户引导 UX 需改善（功能隐藏、导航混乱）</li>
-                                <li class="zh">4. 外部 AI（ChatGPT/Gemini/X）比 App 内 AI 更受青睐</li>
-                            </ul>
-                        </div>
-                    </div>
+    <!-- Day 7: Apr 21 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 21</div>
+                <div class="font-semibold"><span class="en">Day 7 - 2 Sessions</span><span class="zh">第7天 - 2场</span></div>
+                <span class="tag tag-us">US Stock</span><span class="tag tag-jp">JP Stock</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-green-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-us">US Stock</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> US stocks 100%, moomoo-only (~$350K), breakout strategy, mobile-only. <b>Key finding:</b> #1 critical need: simultaneous stop-loss with entry order (OCO on entry). "The single most important feature." Sleeps through US market hours, needs automation.</span><span class="zh"><b>画像：</b>100%美股，moomoo单一账户（约5000万日元），突破策略，纯手机端。<b>核心发现：</b>最关键需求：买入同时设定止损（OCO）。"这是最重要的功能。"美股交易时段在睡觉，需要自动化。</span></p>
+                    <div class="quote-box"><span class="en">"The simultaneous stop-loss on entry order is my #1 most important feature. Please make it happen."</span><span class="zh">"逆指值注文に決済同時注文ができないのが僕の一番大事な機能。なんとかしてほしい。"</span></div>
+                </div>
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> CEO/ex-banker, long-term holder (never sells), SBI primary, 80% investment trusts. <b>Key finding:</b> Blown away by moomoo's feature depth ("like 3 apps fused together"). Main barrier: onboarding friction (postal mail verification kills momentum). Wants AI agent for auto-investing.</span><span class="zh"><b>画像：</b>经营者/前银行员，长期持有型（基本不卖），SBI为主，80%投资信托。<b>核心发现：</b>被moomoo功能深度震撼（"像3个app合体"）。最大障碍：开户流程摩擦（邮寄验证等热情消退）。想要AI代理自动投资。</span></p>
+                    <div class="quote-box"><span class="en">"By the time the postal verification arrives 2-3 days later, my enthusiasm has already cooled off."</span><span class="zh">"ハガキ届く二三日待たなきゃいけない。届いた時にはもう熱が下がる。"</span></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Day 11 -->
-            <div class="bg-white rounded-xl shadow-sm card-hover">
-                <button onclick="toggle('d11')" class="w-full px-5 py-3.5 flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-mono bg-gray-100 px-2.5 py-1 rounded">4/27</span>
-                        <span class="font-medium text-sm">
-                            <span class="en">Day 11: External US/JP Stock + Futures</span>
-                            <span class="zh">Day 11: 站外美股/日株 + 期货</span>
-                        </span>
-                        <span class="text-xs text-gray-400">3 sessions</span>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform" id="arr-d11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="collapse-content" id="d11">
-                    <div class="px-5 pb-4 border-t border-gray-100 pt-3 text-sm text-gray-600">
-                        <div class="text-xs space-y-1">
-                            <p>1:00-2:00 PM: US stock external investor (offline, JP) - tabata</p>
-                            <p>3:00-4:00 PM: JP stock external investor (offline, JP) - tsubouchi</p>
-                            <p>4:30-5:30 PM: Futures external investor (offline, JP) - takeda</p>
-                        </div>
-                        <p class="mt-2 text-xs text-gray-500 italic">
-                            <span class="en">Transcript pending</span>
-                            <span class="zh">待逐字稿更新</span>
-                        </p>
-                    </div>
+    <!-- Day 8: Apr 22 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 22</div>
+                <div class="font-semibold"><span class="en">Day 8 - 3 Sessions</span><span class="zh">第8天 - 3场</span></div>
+                <span class="tag tag-jp">JP Stock</span><span class="tag tag-us">US Stock</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h22m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Rakuten primary, margin-heavy swing trader, CANSLIM approach. <b>Key finding:</b> Trailing stop is the killer feature ("I'd switch for this alone"). Screener filter persistence on mobile is a major gap in Rakuten that moomoo solves.</span><span class="zh"><b>画像：</b>乐天为主，重仓信用交易的swing trader，CANSLIM选股法。<b>核心发现：</b>Trailing stop是杀手锏功能（"仅凭这一个功能我就愿意换"）。乐天手机端筛选条件无法保存是重大痛点，moomoo解决了。</span></p>
+                    <div class="quote-box"><span class="en">"Trailing stop -- I want this SO much. I'd switch to moomoo for this. I manually adjust every single day."</span><span class="zh">"Trailing stop，我太想要了。为了这个我愿意切换到moomoo。我每天都在手动调整。"</span></div>
+                </div>
+                <div class="border-l-4 border-green-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-us">US Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h06m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Sophisticated multi-asset (~80M yen), Rakuten all-in, deep crypto/DeFi experience. <b>Key finding:</b> US stock fee advantage (1/4 of competitors) is a strong draw he didn't know about. Wants crypto staking/lending integration. Would use moomoo as "gateway app" to park crypto.</span><span class="zh"><b>画像：</b>资深多资产投资者（约8000万日元），乐天all-in，深度加密/DeFi经验。<b>核心发现：</b>美股手续费优势（竞品的1/4）是他不知道的强大卖点。想要加密货币质押/借贷集成。愿意用moomoo作为"网关app"存放加密资产。</span></p>
+                    <div class="quote-box"><span class="en">"If crypto staking rates are high enough, I'd use moomoo as the gateway app."</span><span class="zh">"如果加密货币质押利率够高，我会把moomoo当作网关app来用。"</span></div>
+                </div>
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-jp">JP Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, 1h06m</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Ex-executive, SBI primary (37M JP, 9M US, 10M bonds), value investor. <b>Key finding:</b> "Honestly more advanced than SBI" for information. Institutional investor flow data would be checked daily. Key insight: the barrier isn't features -- it's getting people to open the account in the first place.</span><span class="zh"><b>画像：</b>前高管，SBI为主（日股3700万、美股900万、债券1000万），价值投资。<b>核心发现：</b>"信息层面比SBI更高级"。机构资金流向数据会每天查看。关键洞察：障碍不是功能——而是让人迈出开户的第一步。</span></p>
+                    <div class="quote-box"><span class="en">"Once someone starts using an app, they figure it out. The real challenge is getting people to open the account."</span><span class="zh">"一旦开始用某个app，自然就会了。真正的挑战是让人开户。"</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 9: Apr 23 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 23</div>
+                <div class="font-semibold"><span class="en">Day 9 - 3 Sessions</span><span class="zh">第9天 - 3场</span></div>
+                <span class="tag tag-fx">FX</span><span class="tag tag-us">US Stock</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-mm">MM User</span><span class="text-xs text-gray-400">In-person, Chinese</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Chinese in Japan, full-time FX trader + educator, 8M+ yen in US stocks on moomoo. <b>Key finding:</b> Chart layout save/multi-chart sync is critical for FX. Order types too complex (made costly mistakes). Wants TradingView integration or equivalent charting.</span><span class="zh"><b>画像：</b>在日华人，全职FX交易员兼教学，moomoo美股800万+日元。<b>核心发现：</b>图表布局保存/多图同步切换对FX至关重要。订单类型太复杂（导致过成本高昂的错误）。需要TradingView集成或同等画图工具。</span></p>
+                    <div class="quote-box"><span class="en">"The stop-loss order types are too many and too complex. I didn't understand what they meant and lost money."</span><span class="zh">"止盈止损的设置方法选项太多了，我具体不知道它是什么意思，结果亏了钱。"</span></div>
+                </div>
+                <div class="border-l-4 border-blue-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-us">US Stock</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, Japanese</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> Japanese woman on maternity leave, Rakuten primary, day-trades JP stocks (~30 stocks). <b>Key finding:</b> Information overload ("too much for me"). Wants chart thumbnails in watchlist. AI prediction chart and screener are appealing. Key barrier: "hassle outweighs benefit" for switching.</span><span class="zh"><b>画像：</b>育休中的日本女性，乐天为主，日股日内交易（约30支股票）。<b>核心发现：</b>信息过载（"对我来说太多了"）。想要自选股列表中显示图表缩略图。AI预测和筛选器有吸引力。关键障碍："麻烦>收益"所以不换。</span></p>
+                    <div class="quote-box"><span class="en">"The hassle of switching outweighs the benefit. Everyone uses Rakuten, so I can ask people for help."</span><span class="zh">"面倒くささの方が勝ちます。みんなが楽天使ってるからネットでも聞ける。"</span></div>
+                </div>
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, Japanese</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> 20+ year investor, early crypto adopter (2014), FX newcomer via GMO Coin crypto-FX. <b>Key finding:</b> "White screen is a must" (hates dark UI). Physical store in Shibuya builds trust. Wants low-barrier campaigns (food gifts like JFX). Interested in NISA migration to moomoo.</span><span class="zh"><b>画像：</b>投资20年+，加密货币早期参与者（2014年），通过GMO Coin的加密FX进入外汇。<b>核心发现：</b>"白色界面是必须的"（讨厌黑色UI）。涉谷实体店建立信任。想要低门槛活动（像JFX的食品赠礼）。有兴趣把NISA迁移到moomoo。</span></p>
+                    <div class="quote-box"><span class="en">"I want a white screen. I hate dark UI. And the mascot character is a plus -- it makes the app feel approachable."</span><span class="zh">"白い画面でやりたいんですよ。黒い画面が嫌い。キャラクターはあった方がいいですね。"</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 10: Apr 24 -->
+    <div class="mb-3">
+        <div onclick="toggleCollapse(this)" class="bg-white rounded-lg p-4 shadow-sm cursor-pointer flex justify-between items-center card-hover">
+            <div class="flex items-center gap-3">
+                <div class="text-sm font-mono text-gray-400">Apr 24</div>
+                <div class="font-semibold"><span class="en">Day 10 - 4 Sessions</span><span class="zh">第10天 - 4场</span></div>
+                <span class="tag tag-fx">FX</span><span class="tag tag-jp">JP Stock</span><span class="tag tag-us">US Stock</span>
+            </div>
+            <svg class="arrow w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="collapse-content">
+            <div class="bg-gray-50 border border-t-0 rounded-b-lg p-4 space-y-4">
+                <div class="border-l-4 border-yellow-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="tag tag-fx">FX</span><span class="tag tag-non">Non-MM</span><span class="text-xs text-gray-400">In-person, Japanese</span></div>
+                    <p class="text-sm"><span class="en"><b>Profile:</b> 12-year investor, "hands-off" style, uses XM Trading for FX copy trading. <b>Key finding:</b> Copy trading is THE deal-maker. "Without copy trading, there's no reason to switch." Wants it extended to individual stocks too. Trusts moomoo over XM because of Japan base.</span><span class="zh"><b>画像：</b>12年投资经验，"放置型"风格，用XM Trading做FX跟单交易。<b>核心发现：</b>跟单交易是决定性功能。"没有跟单交易就没有换平台的理由。"希望扩展到个别股票。因为moomoo是日本公司所以比XM更信任。</span></p>
+                    <div class="quote-box"><span class="en">"Honestly, I have no ability to trade FX myself. Without copy trading, there's no reason to switch."</span><span class="zh">"正直、自分にはFXを自分で動かす方法が全くない。コピートレードがなかったら乗り換えようがない。"</span></div>
+                </div>
+                <div class="border-l-4 border-gray-400 pl-3">
+                    <div class="flex items-center gap-2 mb-1"><span class="text-xs text-gray-500"><span class="en">+ 3 additional sessions (JP Stock MM, US Stock Non-MM, FX Non-MM) covering: AI screener demand, MMF auto-sweep interest, margin trading expansion needs</span><span class="zh">+ 另外3场（日股MM、美股Non-MM、FX Non-MM），覆盖：AI选股需求、MMF自动申赎兴趣、信用取引扩展需求</span></span></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Core Insights Section (Pure CSS - no Chart.js) -->
-<section id="insights" class="py-10 bg-white">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-6">
-            <span class="en">Core Insights</span><span class="zh">核心洞察</span>
-        </h2>
+<!-- PLACEHOLDER: Insights section will be added -->
+<section id="insights" class="max-w-7xl mx-auto px-4 py-8">
+    <h2 class="section-title"><span class="en">Core Insights</span><span class="zh">核心洞察</span></h2>
 
-        <div class="grid lg:grid-cols-2 gap-6 mb-10">
-            <!-- Competitive Advantages (CSS bars) -->
-            <div class="bg-gray-50 rounded-xl p-5">
-                <h3 class="text-sm font-semibold mb-4">
-                    <span class="en">Competitive Advantages (User Recognition)</span>
-                    <span class="zh">竞争优势（用户认可）</span>
-                </h3>
-                <div class="space-y-2.5">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">UI/UX</span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-500 h-full rounded-full flex items-center justify-end pr-2" style="width:100%"><span class="text-[10px] text-white font-medium">8 days</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">
-                            <span class="en">Info Density</span><span class="zh">信息密度</span>
-                        </span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-400 h-full rounded-full flex items-center justify-end pr-2" style="width:50%"><span class="text-[10px] text-white font-medium">4</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">
-                            <span class="en">US Stock Trading</span><span class="zh">美股交易</span>
-                        </span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-400 h-full rounded-full flex items-center justify-end pr-2" style="width:50%"><span class="text-[10px] text-white font-medium">4</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">
-                            <span class="en">AI Features</span><span class="zh">AI 功能</span>
-                        </span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-300 h-full rounded-full flex items-center justify-end pr-2" style="width:37%"><span class="text-[10px] text-white font-medium">3</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">
-                            <span class="en">All-in-One</span><span class="zh">一站式</span>
-                        </span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-300 h-full rounded-full flex items-center justify-end pr-2" style="width:25%"><span class="text-[10px] text-white font-medium">2</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">24h Trading</span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-400 h-full rounded-full flex items-center justify-end pr-2" style="width:50%"><span class="text-[10px] text-white font-medium">4</span></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-28 text-gray-500 shrink-0">
-                            <span class="en">Promotions</span><span class="zh">促销活动</span>
-                        </span>
-                        <div class="flex-1 bg-gray-200 rounded-full h-5 overflow-hidden"><div class="bar bg-orange-200 h-full rounded-full flex items-center justify-end pr-2" style="width:25%"><span class="text-[10px] text-orange-700 font-medium">2</span></div></div>
-                    </div>
+    <!-- Competitive Advantages -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Validated Competitive Advantages (User-Confirmed)</span><span class="zh">已验证的竞争优势（用户确认）</span></h3>
+        <p class="text-xs text-gray-500 mb-4"><span class="en">Frequency = number of interviews where this was explicitly praised</span><span class="zh">频次 = 明确提到该优势的访谈场数</span></p>
+        <div class="space-y-3">
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">UI/UX Overall Quality</span><span class="zh">整体UI/UX质量</span></span><span class="font-mono text-xs">20/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-orange-500" style="width:74%">74%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Zero/Low Trading Fees</span><span class="zh">零/低手续费</span></span><span class="font-mono text-xs">16/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-orange-500" style="width:59%">59%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Information Density & Analysis Tools</span><span class="zh">信息密度和分析工具</span></span><span class="font-mono text-xs">14/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-orange-400" style="width:52%">52%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Real-time Data Quality</span><span class="zh">实时数据质量</span></span><span class="font-mono text-xs">11/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-amber-500" style="width:41%">41%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Advanced Order Types (Trailing Stop, OCO)</span><span class="zh">高级订单类型（追踪止损、OCO）</span></span><span class="font-mono text-xs">10/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-amber-500" style="width:37%">37%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">24h US Stock Trading</span><span class="zh">24小时美股交易</span></span><span class="font-mono text-xs">8/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-yellow-500" style="width:30%">30%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Screener & Filter Capabilities</span><span class="zh">筛选器功能</span></span><span class="font-mono text-xs">8/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-yellow-500" style="width:30%">30%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Login Simplicity (Biometric)</span><span class="zh">登录便捷性（生体认证）</span></span><span class="font-mono text-xs">6/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-yellow-400" style="width:22%">22%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Global Community / Social Features</span><span class="zh">全球社区/社交功能</span></span><span class="font-mono text-xs">5/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-yellow-400" style="width:19%">19%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Multi-currency Purchase (JPY→USD direct)</span><span class="zh">多币种直接买入（日元直购美股）</span></span><span class="font-mono text-xs">4/27</span></div><div class="w-full bg-gray-100 rounded h-6"><div class="freq-bar bg-gray-400" style="width:15%">15%</div></div></div>
+        </div>
+    </div>
+
+    <!-- Pain Points / Feature Gaps -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Top Product Gaps (Pain Points by Frequency)</span><span class="zh">产品缺口 TOP 排名（按提及频次）</span></h3>
+        <div class="space-y-3">
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                <div class="text-red-600 font-bold text-lg w-8">1</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">No FX Trading Product</span><span class="zh">无FX交易产品</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~10 interviews | Blocks entire FX user segment acquisition</span><span class="zh">约10场提及 | 阻碍整个FX用户群获取</span></div>
                 </div>
+                <span class="tag" style="background:#fef2f2;color:#dc2626;">P0</span>
             </div>
-
-            <!-- Cross-Sell Opportunity (CSS) -->
-            <div class="bg-gray-50 rounded-xl p-5">
-                <h3 class="text-sm font-semibold mb-4">
-                    <span class="en">Cross-Sell Opportunity Matrix</span>
-                    <span class="zh">Cross-Sell 机会矩阵</span>
-                </h3>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">US -> JP Stock</span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;</span><span class="text-gray-300 text-sm">&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">High after JP stock upgrade</span><span class="zh">日股升级后自然转化</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">JP -> US Stock</span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;</span><span class="text-gray-300 text-sm">&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">Info+tool advantage driven</span><span class="zh">信息+工具优势驱动</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">
-                            <span class="en">Stock -> Options</span><span class="zh">股票 -> 期权</span>
-                        </span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;&#9733;&#9733;</span><span class="text-gray-300 text-sm">&#9733;&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">Interest exists, needs education</span><span class="zh">有兴趣但需教育</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">FX -> Stock</span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;</span><span class="text-gray-300 text-sm">&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">Cross-collateral + NISA transfer intent</span><span class="zh">跨品种担保 + NISA 转移意向</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">
-                            <span class="en">Stock -> Crypto</span><span class="zh">股票 -> 加密</span>
-                        </span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;&#9733;</span><span class="text-gray-300 text-sm">&#9733;&#9733;&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">Non-core, compliance heavy</span><span class="zh">非核心，合规门槛高</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs w-32 text-gray-500 shrink-0">
-                            <span class="en">Event Contracts</span><span class="zh">事件合约</span>
-                        </span>
-                        <div class="flex gap-0.5"><span class="text-amber-400 text-sm">&#9733;</span><span class="text-gray-300 text-sm">&#9733;&#9733;&#9733;&#9733;</span></div>
-                        <span class="text-[10px] text-gray-400 ml-auto">
-                            <span class="en">No natural demand</span><span class="zh">无自然需求</span>
-                        </span>
-                    </div>
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                <div class="text-red-600 font-bold text-lg w-8">2</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">MMF / Idle Cash Yield (Auto-sweep)</span><span class="zh">MMF/闲置资金收益（自动申赎）</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~12 interviews | Universally desired across all segments</span><span class="zh">约12场提及 | 所有分群普遍需求</span></div>
                 </div>
+                <span class="tag" style="background:#fef2f2;color:#dc2626;">P0</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                <div class="text-red-600 font-bold text-lg w-8">3</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">JP Stock Margin Trading (信用取引)</span><span class="zh">日股信用取引</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~8 interviews | Core need for active JP stock traders</span><span class="zh">约8场提及 | 活跃日股交易者的核心需求</span></div>
+                </div>
+                <span class="tag" style="background:#fef2f2;color:#dc2626;">P0</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                <div class="text-red-600 font-bold text-lg w-8">4</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">OCO Orders for JP Stocks (Simultaneous TP/SL)</span><span class="zh">日股OCO注文（同时设止盈止损）</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~7 interviews | Critical for swing/day traders who can't monitor</span><span class="zh">约7场提及 | 无法持续盯盘的swing/日内交易者的关键需求</span></div>
+                </div>
+                <span class="tag" style="background:#fef2f2;color:#dc2626;">P0</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-100">
+                <div class="text-amber-600 font-bold text-lg w-8">5</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">Feature Discoverability / Navigation UX</span><span class="zh">功能发现性/导航UX</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~8 interviews | "Features exist but users can't find them"</span><span class="zh">约8场提及 | "功能存在但用户找不到"</span></div>
+                </div>
+                <span class="tag" style="background:#fffbeb;color:#d97706;">P1</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-100">
+                <div class="text-amber-600 font-bold text-lg w-8">6</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">TradingView Integration</span><span class="zh">TradingView 集成</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~6 interviews | Power users split research (TV) and execution (moomoo)</span><span class="zh">约6场提及 | 高级用户分离研究（TV）和执行（moomoo）</span></div>
+                </div>
+                <span class="tag" style="background:#fffbeb;color:#d97706;">P1</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-100">
+                <div class="text-amber-600 font-bold text-lg w-8">7</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">Crypto Trading / Staking</span><span class="zh">加密货币交易/质押</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~6 interviews | Especially staking yield for BTC/ETH holders</span><span class="zh">约6场提及 | 尤其是BTC/ETH持有者的质押收益</span></div>
+                </div>
+                <span class="tag" style="background:#fffbeb;color:#d97706;">P1</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-100">
+                <div class="text-amber-600 font-bold text-lg w-8">8</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm"><span class="en">Real-time Fractional Share Execution</span><span class="zh">实时单元未満株约定</span></div>
+                    <div class="text-xs text-gray-500"><span class="en">~4 interviews | Blocks consolidation for high-price stock investors</span><span class="zh">约4场提及 | 阻碍高价股投资者的资产集中</span></div>
+                </div>
+                <span class="tag" style="background:#fffbeb;color:#d97706;">P1</span>
             </div>
         </div>
+    </div>
 
-        <!-- Product Shortcomings -->
-        <h3 class="text-sm font-semibold mb-3">
-            <span class="en">Product Shortcomings by Priority</span>
-            <span class="zh">产品短板（按优先级）</span>
-        </h3>
-        <div class="grid md:grid-cols-3 gap-3 mb-10">
-            <div class="space-y-2">
-                <div class="text-xs font-bold text-red-600 uppercase">P0 Blockers</div>
-                <div class="priority-p0 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">P&L % Display Missing</span><span class="zh">P&L 百分比显示缺失</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">Only shows $ amount, not %; reported 1 year ago, affects high-AUM retention</span>
-                        <span class="zh">仅显示金额不显示百分比；反馈已超1年未修复，影响大客户留存</span>
-                    </p>
-                </div>
-                <div class="priority-p0 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">JP Stock Capability Gap</span><span class="zh">日股能力落后美股</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">Order types, margin trading, PTS support</span>
-                        <span class="zh">订单类型、信用交易、PTS 支持</span>
-                    </p>
-                </div>
-                <div class="priority-p0 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">Bank Ecosystem Lock-in</span><span class="zh">银行/资金流动壁垒</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">Rakuten/SBI deposit-securities-FX integration</span>
-                        <span class="zh">乐天/SBI 存款-证券-FX 一体化生态</span>
-                    </p>
-                </div>
-            </div>
-            <div class="space-y-2">
-                <div class="text-xs font-bold text-amber-600 uppercase">P1 High Impact</div>
-                <div class="priority-p1 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">New User Navigation & Discoverability</span><span class="zh">新用户导航与功能发现</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">Coupons/MyPage buried; news hard to find; asset overview inferior to competitors</span>
-                        <span class="zh">优惠券/我的页面层级过深；新闻难找；资产总览不如竞品</span>
-                    </p>
-                </div>
-                <div class="priority-p1 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">Account Experience</span><span class="zh">账户体验不一致</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">No long/short separation; margin vs cash inconsistency</span>
-                        <span class="zh">无法分离长期/短期；信用与现金体验不一</span>
-                    </p>
-                </div>
-                <div class="priority-p1 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">Trust Deficit</span><span class="zh">信任感不足</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">New brand + China background -> hesitation</span>
-                        <span class="zh">新品牌+中国背景 -> 用户犹豫</span>
-                    </p>
-                </div>
-            </div>
-            <div class="space-y-2">
-                <div class="text-xs font-bold text-blue-600 uppercase">P2 Improvements</div>
-                <div class="priority-p2 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">White/Light Theme Option</span><span class="zh">白色/浅色主题选项</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">FX beginners find dark UI intimidating; dealbreaker for some</span>
-                        <span class="zh">FX 新手觉得深色 UI 有压迫感；对部分用户是阻碍</span>
-                    </p>
-                </div>
-                <div class="priority-p2 bg-gray-50 rounded-lg p-3">
-                    <div class="font-medium text-xs">
-                        <span class="en">Fractional Trading</span><span class="zh">零股交易</span>
-                    </div>
-                    <p class="text-[11px] text-gray-500 mt-0.5">
-                        <span class="en">No real-time fractional = fund outflow</span>
-                        <span class="zh">不支持实时零股 = 资金流出</span>
-                    </p>
-                </div>
-            </div>
+    <!-- Cross-Sell Matrix -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Cross-Sell Opportunity Matrix</span><span class="zh">交叉销售机会矩阵</span></h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="p-3 text-left border"><span class="en">From → To</span><span class="zh">从 → 到</span></th>
+                        <th class="p-3 text-center border"><span class="en">Opportunity</span><span class="zh">机会度</span></th>
+                        <th class="p-3 text-left border"><span class="en">Evidence</span><span class="zh">依据</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="p-3 border font-medium">FX → Stock</td><td class="p-3 border text-center text-orange-600 font-bold">★★★★★</td><td class="p-3 border text-xs"><span class="en">8+ FX users expressed desire to consolidate all trading in one platform. moomoo's stock analysis tools are strong draw.</span><span class="zh">8位以上FX用户表达了希望在一个平台整合所有交易的意愿。moomoo的股票分析工具是强吸引力。</span></td></tr>
+                    <tr><td class="p-3 border font-medium">US Stock → JP Stock</td><td class="p-3 border text-center text-orange-600 font-bold">★★★★☆</td><td class="p-3 border text-xs"><span class="en">Multiple US stock MM users unaware of moomoo's JP stock features. "moomoo=US stocks" mental model. Education alone could convert.</span><span class="zh">多位美股MM用户不知道moomoo有日股功能。"moomoo=美股"心智模型。仅靠教育就能转化。</span></td></tr>
+                    <tr><td class="p-3 border font-medium">Stock → Crypto</td><td class="p-3 border text-center text-amber-600 font-bold">★★★☆☆</td><td class="p-3 border text-xs"><span class="en">5-6 users hold crypto elsewhere. Would consolidate if staking rates competitive. "Gateway app" positioning viable.</span><span class="zh">5-6位用户在其他平台持有加密资产。如果质押利率有竞争力会集中过来。"网关app"定位可行。</span></td></tr>
+                    <tr><td class="p-3 border font-medium">Stock → FX</td><td class="p-3 border text-center text-amber-600 font-bold">★★★☆☆</td><td class="p-3 border text-xs"><span class="en">Existing stock users curious about FX but fear losses. Low-barrier entry (1000 units) + copy trading + education can unlock.</span><span class="zh">现有股票用户对FX好奇但怕亏。低门槛入场（1000通货）+跟单+教育可以打开。</span></td></tr>
+                    <tr><td class="p-3 border font-medium">Futures/CFD → Stock</td><td class="p-3 border text-center text-yellow-600 font-bold">★★☆☆☆</td><td class="p-3 border text-xs"><span class="en">Futures users are highly specialized. Conditional on moomoo launching index futures/CFD products first.</span><span class="zh">期货用户高度专业化。取决于moomoo是否先上线指数期货/CFD产品。</span></td></tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <!-- User Quotes -->
-        <h3 class="text-sm font-semibold mb-3">
-            <span class="en">Key User Voices</span><span class="zh">用户原声</span>
-        </h3>
-        <div class="grid md:grid-cols-3 gap-3">
-            <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700">"絶対にベスト"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 6 -- moomoo UI/UX</p>
+    <!-- Switching Barriers -->
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Switching Barriers Analysis</span><span class="zh">切换壁垒分析</span></h3>
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold text-red-600 mb-2"><span class="en">#1 Ecosystem Lock-in (Rakuten/SBI)</span><span class="zh">#1 生态锁定（乐天/SBI）</span></div>
+                <p class="text-xs text-gray-600 mb-2"><span class="en">Bank auto-sweep, credit card points, economic ecosystem integration. Mentioned in 15+ interviews.</span><span class="zh">银行自动归集、信用卡积分、经济圈整合。15场以上访谈提及。</span></p>
+                <div class="quote-box text-xs"><span class="en">"The Rakuten bank sweep is so convenient that unless the rate is significantly better, I wouldn't switch."</span><span class="zh">"楽天銀行の自動スイープが便利すぎて、よっぽど金利が良くない限り動かない。"</span></div>
             </div>
-            <div class="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"If 2nd broker overlaps SBI, no reason to use it"</p>
-                <p class="text-xs italic text-gray-700 zh">"第二家券商和 SBI 重叠就没有使用理由"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 8 -- Differentiation</p>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold text-red-600 mb-2"><span class="en">#2 Social Proof Deficit</span><span class="zh">#2 缺乏社交证明</span></div>
+                <p class="text-xs text-gray-600 mb-2"><span class="en">"Nobody around me uses moomoo." Japanese users heavily rely on word-of-mouth. Mentioned in 6+ interviews.</span><span class="zh">"周围没人用moomoo。"日本用户非常依赖口碑。6场以上访谈提及。</span></p>
+                <div class="quote-box text-xs"><span class="en">"I choose based on word-of-mouth and usability, not brand name. But very few people around me use moomoo."</span><span class="zh">"口コミと使いやすさで選ぶ。でも周りにmoomoo使ってる人が非常に少ない。"</span></div>
             </div>
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"Recommending trading app is risky - money, losses, responsibility"</p>
-                <p class="text-xs italic text-gray-700 zh">"推荐交易 app 有风险 - 涉及金钱、亏损、责任"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 6 -- Referral difficulty</p>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold text-red-600 mb-2"><span class="en">#3 Migration Friction</span><span class="zh">#3 迁移摩擦</span></div>
+                <p class="text-xs text-gray-600 mb-2"><span class="en">NISA transfer takes 3-4 months. Selling→withdrawing→depositing causes opportunity cost. Postal verification kills momentum.</span><span class="zh">NISA转移需要3-4个月。卖出→出金→入金造成机会成本。邮寄验证消磨热情。</span></p>
+                <div class="quote-box text-xs"><span class="en">"By the time the postal verification arrives, my enthusiasm has already cooled off."</span><span class="zh">"ハガキ届く頃にはもう熱が下がってる。"</span></div>
             </div>
-            <div class="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"Use moomoo for speculation; keep long-term at other brokers"</p>
-                <p class="text-xs italic text-gray-700 zh">"用 moomoo 做投机，长期配置留在其他券商"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 6 -- User pattern</p>
-            </div>
-            <div class="bg-green-50 border border-green-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"Money earns interest just sitting in moomoo" = viral message</p>
-                <p class="text-xs italic text-gray-700 zh">"钱放 moomoo 就能赚利息" = 强传播信息</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 6 -- MRF/MMF</p>
-            </div>
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"Buy stocks directly from MMF without manual redemption"</p>
-                <p class="text-xs italic text-gray-700 zh">"MMF 直接买股票无需手动赎回" = 高吸引力</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 10 -- High-AUM user</p>
-            </div>
-            <div class="bg-pink-50 border border-pink-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700">"韓国株めっちゃ欲しい" (Korean stocks - really want them)</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 10 -- High-AUM US stock user</p>
-            </div>
-            <div class="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"P&L % has been missing for over a year - I can only see dollar amounts"</p>
-                <p class="text-xs italic text-gray-700 zh">"P&L 百分比缺失超过一年 - 只能看到金额"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 10 -- High-AUM JP stock user (CRITICAL)</p>
-            </div>
-            <div class="bg-teal-50 border border-teal-200 rounded-lg p-3">
-                <p class="text-xs italic text-gray-700 en">"White UI is essential. Dark theme is too intimidating for FX beginners."</p>
-                <p class="text-xs italic text-gray-700 zh">"白色界面是必须的。深色主题对 FX 新手太有压迫感。"</p>
-                <p class="text-[10px] text-gray-500 mt-1">Day 9 -- FX non-moomoo user</p>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold text-red-600 mb-2"><span class="en">#4 Brand Perception Gap</span><span class="zh">#4 品牌认知偏差</span></div>
+                <p class="text-xs text-gray-600 mb-2"><span class="en">"moomoo = US stocks only" or "too professional/speculative." This limits referrals and JP stock adoption.</span><span class="zh">"moomoo=只做美股"或"太专业/投机"。限制了转介和日股采用。</span></p>
+                <div class="quote-box text-xs"><span class="en">"The professional image is a double-edged sword. It scares off casual users."</span><span class="zh">"プロっぽいイメージは諸刃の剣。カジュアルなユーザーが引いちゃう。"</span></div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Product Recommendations -->
-<section id="recommendations" class="py-10 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-6">
-            <span class="en">Product Recommendations</span><span class="zh">产品做货建议</span>
-        </h2>
-        <div class="grid lg:grid-cols-3 gap-4">
-            <!-- P0 -->
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="w-3 h-3 rounded bg-red-500"></div>
-                    <span class="font-bold text-sm text-red-700">P0 Must Build</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="priority-p0 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">1. JP Stock Margin Trading</span>
-                            <span class="zh">1. 日股信用交易</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li class="en">General + institutional margin support</li>
-                            <li class="en">Competitive margin rates</li>
-                            <li class="en">Margin order UX = cash order UX</li>
-                            <li class="zh">一般信用+制度信用支持</li>
-                            <li class="zh">有竞争力的信用金利</li>
-                            <li class="zh">信用订单体验=现金订单体验</li>
-                        </ul>
-                    </div>
-                    <div class="priority-p0 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">2. JP Stock Order Parity</span>
-                            <span class="zh">2. 日股订单能力对齐美股</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li>IFDOCO, TP/SL, MOC, PTS, Trailing Stop</li>
-                        </ul>
-                    </div>
-                    <div class="priority-p0 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">3. PTS Night Trading</span>
-                            <span class="zh">3. PTS 夜盘交易</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li class="en">Active traders: essential risk mgmt tool</li>
-                            <li class="zh">活跃交易者视为必要风控工具</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- P1 -->
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="w-3 h-3 rounded bg-amber-500"></div>
-                    <span class="font-bold text-sm text-amber-700">P1 High Impact</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="priority-p1 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">4. Idle Cash Interest (MRF/MMF)</span>
-                            <span class="zh">4. 闲置资金生息 (MRF/MMF)</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li class="en">All users: strong interest (validated Day 10)</li>
-                            <li class="en">MMF -> stock purchase without redemption = #1 ask</li>
-                            <li class="en">Bank partnerships (Minano 0.5-0.6%)</li>
-                            <li class="en">+ US Bonds (Treasury/Corporate) demand from high-AUM</li>
-                            <li class="zh">所有用户强烈兴趣（Day 10 验证）</li>
-                            <li class="zh">MMF 直接购买股票无需赎回 = 排名第一需求</li>
-                            <li class="zh">银行合作（Minano 0.5-0.6%）</li>
-                            <li class="zh">+ 大客户需要美国债券（国债/公司债）</li>
-                        </ul>
-                    </div>
-                    <div class="priority-p1 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">5. Account Separation</span>
-                            <span class="zh">5. 账户分离/Portfolio 管理</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li class="en">Long/short "bucket" concept</li>
-                            <li class="en">Cross-broker aggregation + P&L % view</li>
-                            <li class="zh">长期/短期"桶"概念</li>
-                            <li class="zh">跨券商聚合 + P&L 百分比显示</li>
-                        </ul>
-                    </div>
-                    <div class="priority-p1 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">6. Navigation & Onboarding UX</span>
-                            <span class="zh">6. 导航与新用户引导 UX</span>
-                        </h4>
-                        <ul class="text-[11px] text-gray-600 space-y-0.5">
-                            <li class="en">Coupon/MyPage too deep (new user can't find)</li>
-                            <li class="en">News section discoverability poor</li>
-                            <li class="en">Asset overview needs glance-able summary</li>
-                            <li class="en">"Live/Coming soon" labels for features</li>
-                            <li class="zh">优惠券/我的页面层级太深（新用户找不到）</li>
-                            <li class="zh">新闻区可发现性差</li>
-                            <li class="zh">资产总览需要一目了然的摘要</li>
-                            <li class="zh">"已上线/即将上线"功能标签</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- P2 -->
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="w-3 h-3 rounded bg-blue-500"></div>
-                    <span class="font-bold text-sm text-blue-700">P2 Explore</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">7. FX Copy Trading</h4>
-                        <p class="text-[11px] text-gray-600">
-                            <span class="en">Beginners strongly interested; expandable to stocks</span>
-                            <span class="zh">新手强烈兴趣；可扩展到股票</span>
-                        </p>
-                    </div>
-                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">8. AI Decision Support</span>
-                            <span class="zh">8. AI 决策辅助</span>
-                        </h4>
-                        <p class="text-[11px] text-gray-600">
-                            <span class="en">Portfolio advice (not auto-trade); accuracy = trust gate</span>
-                            <span class="zh">组合建议（非自动交易）；准确性=信任门槛</span>
-                        </p>
-                    </div>
-                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">9. TradingView-Level PC Charts</span>
-                            <span class="zh">9. TradingView 级 PC 图表</span>
-                        </h4>
-                        <p class="text-[11px] text-gray-600">
-                            <span class="en">Multi-panel, draw-to-order; FX trader must-have</span>
-                            <span class="zh">多画板、画线下单；FX 交易者刚需</span>
-                        </p>
-                    </div>
-                    <div class="priority-p2 bg-white rounded-lg p-4 shadow-sm">
-                        <h4 class="font-semibold text-xs mb-1.5">
-                            <span class="en">10. Shareholder Benefits + CSV Export</span>
-                            <span class="zh">10. 株主優待 + CSV 导出</span>
-                        </h4>
-                        <p class="text-[11px] text-gray-600">
-                            <span class="en">Search/filter for benefits; single-stock export</span>
-                            <span class="zh">优待搜索/筛选；单只股票交易导出</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-3 bg-gray-100 rounded-lg p-3">
-                    <div class="text-[10px] font-bold text-gray-500 uppercase mb-1">Low Priority</div>
-                    <p class="text-[11px] text-gray-500">
-                        <span class="en">Event Contracts (no demand) | Crypto (non-core) | More markets (secondary)</span>
-                        <span class="zh">事件合约（无需求）| 加密（非核心）| 更多市场（次要）</span>
-                    </p>
-                </div>
-            </div>
+<!-- PLACEHOLDER: Recommendations section will be added -->
+<section id="recommendations" class="max-w-7xl mx-auto px-4 py-8">
+    <h2 class="section-title"><span class="en">Product Recommendations</span><span class="zh">产品建议（做货侧）</span></h2>
+    <p class="text-sm text-gray-500 mb-6"><span class="en">Prioritized based on user demand frequency, revenue impact, and competitive necessity</span><span class="zh">基于用户需求频次、营收影响和竞争必要性排序</span></p>
+
+    <!-- P0 -->
+    <h3 class="font-bold text-red-600 mb-3 flex items-center gap-2">
+        <span class="inline-block w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">P0</span>
+        <span class="en">Critical / Must-Have (Blocks growth without these)</span><span class="zh">关键必做（缺少则增长受阻）</span>
+    </h3>
+    <div class="grid md:grid-cols-2 gap-4 mb-8">
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p0">
+            <div class="font-bold mb-2"><span class="en">FX Trading Launch</span><span class="zh">FX交易上线</span></div>
+            <p class="text-sm text-gray-600 mb-3"><span class="en">Launch FX product with: tight spreads (USD/JPY ≤0.2 pips), 1000-unit minimum lots, 8 major cross pairs, clean chart-first interface, integrated expert commentary.</span><span class="zh">上线FX产品，包括：极低点差（USD/JPY ≤0.2 pips）、1000通货最小交易单位、8大交叉货币对、简洁图表优先界面、集成专家解读。</span></p>
+            <div class="text-xs text-gray-400 mb-2"><span class="en">Evidence: ~10 interviews, all FX segment users</span><span class="zh">依据：约10场访谈，所有FX分群用户</span></div>
+            <div class="quote-box"><span class="en">"Japanese FX brokers have 0.2 pips but terrible UI. If moomoo combines its UI with competitive spreads, it's unbeatable."</span><span class="zh">"日本FX券商有0.2的点差但界面很烂。如果moomoo把UI优势和有竞争力的点差结合，就无敌了。"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p0">
+            <div class="font-bold mb-2"><span class="en">MMF Auto-Sweep for Idle Cash</span><span class="zh">闲置资金MMF自动申赎</span></div>
+            <p class="text-sm text-gray-600 mb-3"><span class="en">Offer competitive yield (~0.5-0.6% JPY, ~3-4% USD) with automatic sweep. Users must be able to buy stocks directly from MMF without manual redemption steps.</span><span class="zh">提供有竞争力的收益率（日元约0.5-0.6%、美元约3-4%），自动归集。用户必须能从MMF直接买股而无需手动赎回步骤。</span></p>
+            <div class="text-xs text-gray-400 mb-2"><span class="en">Evidence: ~12 interviews across ALL segments</span><span class="zh">依据：约12场访谈，覆盖所有分群</span></div>
+            <div class="quote-box"><span class="en">"If moomoo offered 0.6% vs SBI's 0.43%, I'd move my funds immediately. That's sugoi (amazing)."</span><span class="zh">"如果moomoo提供0.6%对比SBI的0.43%，我会立刻搬钱过来。すごい。"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p0">
+            <div class="font-bold mb-2"><span class="en">JP Stock Margin Trading (信用取引)</span><span class="zh">日股信用取引</span></div>
+            <p class="text-sm text-gray-600 mb-3"><span class="en">Full margin trading with: OCO orders (entry + simultaneous TP/SL), closing auction orders (引けなりゆき), 90-day order validity, trailing stop. Match or exceed current order type parity with US stocks.</span><span class="zh">完整信用取引功能：OCO注文（买入同时设止盈止损）、引けなりゆき注文、90天有效期、追踪止损。匹配或超越目前美股的注文类型丰富度。</span></p>
+            <div class="text-xs text-gray-400 mb-2"><span class="en">Evidence: ~8 interviews, active JP stock traders</span><span class="zh">依据：约8场访谈，活跃日股交易者</span></div>
+            <div class="quote-box"><span class="en">"I'd switch to moomoo for trailing stop alone. I manually adjust stop-losses every single day."</span><span class="zh">"仅凭trailing stop我就愿意换到moomoo。我每天都在手动调整止损。"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p0">
+            <div class="font-bold mb-2"><span class="en">OCO / Bracket Orders for JP Stocks</span><span class="zh">日股OCO/括号注文</span></div>
+            <p class="text-sm text-gray-600 mb-3"><span class="en">Enable simultaneous take-profit + stop-loss setting at entry. Critical for users who sleep during US hours or work during JP market hours. Already available for US stocks -- parity needed.</span><span class="zh">允许在买入时同时设定止盈+止损。对美股时段在睡觉或日股时段在工作的用户至关重要。美股已有此功能——需要对齐。</span></p>
+            <div class="text-xs text-gray-400 mb-2"><span class="en">Evidence: ~7 interviews, labeled "most important feature" by multiple users</span><span class="zh">依据：约7场访谈，多位用户称为"最重要的功能"</span></div>
+            <div class="quote-box"><span class="en">"This is my #1 most important feature. I sleep during US market hours -- I need automation."</span><span class="zh">"これが僕の一番大事な機能。寝てる間に自動でやってほしい。"</span></div>
+        </div>
+    </div>
+
+    <!-- P1 -->
+    <h3 class="font-bold text-amber-600 mb-3 flex items-center gap-2">
+        <span class="inline-block w-8 h-8 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-sm font-bold">P1</span>
+        <span class="en">High Priority (Strong demand, significant retention/acquisition impact)</span><span class="zh">高优先级（强需求，显著影响留存和获客）</span>
+    </h3>
+    <div class="grid md:grid-cols-2 gap-4 mb-8">
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">TradingView Deep Integration</span><span class="zh">TradingView 深度集成</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Partner with TradingView for: in-app chart widget, one-click order from TV chart, or at minimum support TV's broker integration API. Power users currently split workflow between TV (research) and moomoo (execution).</span><span class="zh">与TradingView合作：应用内图表插件、从TV图表一键下单，或至少支持TV的broker集成API。高级用户目前在TV（研究）和moomoo（执行）之间分割工作流。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 6 interviews | "I analyze on TradingView, execute on moomoo"</span><span class="zh">依据：6场访谈 | "分析用TradingView，下单用moomoo"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">Feature Discoverability Overhaul</span><span class="zh">功能发现性大改</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Many powerful features are "buried too deep." Actions: add plain-language tooltips, surface AI features on chart pages, add onboarding tours, make screener accessible from main navigation (not 3 taps deep).</span><span class="zh">很多强大功能"埋得太深"。行动：添加通俗说明tooltip、在图表页面显露AI功能、添加引导教程、让筛选器从主导航可达（而非3层深）。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 8+ interviews | "Features exist but users can't find them"</span><span class="zh">依据：8场以上访谈 | "功能存在但用户找不到"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">Crypto Staking / Lending</span><span class="zh">加密货币质押/借贷</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Offer staking for major coins (BTC, ETH, SOL) with competitive rates. Position as "gateway app" -- users park crypto here and only move to DEX for niche tokens. Small-unit transfer support (0.0001 BTC minimum).</span><span class="zh">提供主流币种（BTC、ETH、SOL）的质押，利率有竞争力。定位为"网关app"——用户在此存放加密资产，仅在需要小众代币时才转到DEX。支持小额转账（最低0.0001 BTC）。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 6 interviews | Users hold crypto on 3-4 platforms, want consolidation</span><span class="zh">依据：6场访谈 | 用户在3-4个平台持有加密资产，想要集中</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">Real-time Fractional Share Execution</span><span class="zh">实时单元未満株约定</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Current twice-daily settlement blocks users from position-sizing expensive stocks (Keyence: 70,000+ yen/share). Users specifically use Rakuten for this one feature. Real-time execution would trigger full asset consolidation.</span><span class="zh">目前一日两次约定阻碍了用户对高价股的仓位管理（Keyence：7万+日元/股）。用户专门为此功能使用乐天。实时约定将触发全部资产集中。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 4 interviews | "This is THE #1 thing I need to consolidate to moomoo"</span><span class="zh">依据：4场访谈 | "这是我把所有资产集中到moomoo所需的第一件事"</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">Desktop Multi-window / Detachable Panels</span><span class="zh">桌面端多窗口/可拆分面板</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Allow undocking chart, order book, watchlist into separate windows for multi-monitor setups. Professional traders need this to replace their current TradingView + broker combo.</span><span class="zh">允许将图表、买卖盘、自选股拆分为独立窗口用于多显示器设置。专业交易者需要此功能来替代当前的TradingView+券商组合。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 4 interviews | Futures and multi-screen power users</span><span class="zh">依据：4场访谈 | 期货和多屏高级用户</span></div>
+        </div>
+        <div class="bg-white rounded-lg p-5 shadow-sm priority-p1">
+            <div class="font-bold mb-2"><span class="en">Cross-Asset Collateral (Stocks as FX Margin)</span><span class="zh">跨品种担保（股票抵充FX保证金）</span></div>
+            <p class="text-sm text-gray-600 mb-2"><span class="en">Allow stock holdings to serve as FX margin collateral. Eliminates friction of moving funds between accounts. Powerful cross-sell mechanism for FX launch.</span><span class="zh">允许持有的股票作为FX保证金担保。消除账户间资金调拨的摩擦。FX上线的强力交叉销售机制。</span></p>
+            <div class="text-xs text-gray-400"><span class="en">Evidence: 4 interviews | Multiple users explicitly endorsed this concept</span><span class="zh">依据：4场访谈 | 多位用户明确认可这个概念</span></div>
+        </div>
+    </div>
+
+    <!-- P2 -->
+    <h3 class="font-bold text-blue-600 mb-3 flex items-center gap-2">
+        <span class="inline-block w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">P2</span>
+        <span class="en">Medium Priority (Strong niche demand, differentiator potential)</span><span class="zh">中优先级（细分需求强烈，差异化潜力）</span>
+    </h3>
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">Copy Trading (FX + Stocks)</span><span class="zh">跟单交易（FX+股票）</span></div>
+            <p class="text-xs text-gray-600"><span class="en">Deal-breaker for hands-off FX investors. Show trader track records including major drawdowns. Extend to stock copy trading.</span><span class="zh">对放置型FX投资者是决定性功能。展示交易者历史业绩（含大回撤）。扩展到股票跟单。</span></p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">Sub-Account Separation</span><span class="zh">子账户分离</span></div>
+            <p class="text-xs text-gray-600"><span class="en">Separate long-term holdings from short-term trades within one account. "If this existed, I'd move everything here."</span><span class="zh">在一个账户内分离长期持仓和短期交易。"有这功能我就把所有资产搬过来。"</span></p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">Chart Layout Save / Multi-chart Sync</span><span class="zh">图表布局保存/多图同步</span></div>
+            <p class="text-xs text-gray-600"><span class="en">Save custom 4/6-panel layouts for different asset groups. Sync time period changes across all panels simultaneously.</span><span class="zh">保存自定义4/6宫格布局。跨所有面板同步切换时间周期。</span></p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">AI Auto-Trading Agent</span><span class="zh">AI自动交易代理</span></div>
+            <p class="text-xs text-gray-600"><span class="en">"Give it 1M yen and tell it to make 10% in 3 months." Risk-tolerance modes (aggressive/conservative). Show AI prediction accuracy track record.</span><span class="zh">"给它100万让它3个月赚10%。"风险偏好模式（激进/保守）。展示AI预测准确率历史。</span></p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">White/Light Theme Option</span><span class="zh">白色/亮色主题选项</span></div>
+            <p class="text-xs text-gray-600"><span class="en">"I hate dark UI." Some users (especially older/female) strongly prefer white backgrounds. Must be a toggle option.</span><span class="zh">"黑い画面が嫌い。"部分用户（尤其年长/女性）强烈偏好白色背景。必须作为可切换选项。</span></p>
+        </div>
+        <div class="bg-white rounded-lg p-4 shadow-sm priority-p2">
+            <div class="font-semibold text-sm mb-1"><span class="en">US Bond Trading</span><span class="zh">美国债券交易</span></div>
+            <p class="text-xs text-gray-600"><span class="en">HNW users hold significant bond positions via competitors (Nomura, IB). Opportunity to capture this asset class.</span><span class="zh">高净值用户通过竞品（野村、IB）持有大量债券。有机会获取此资产类别。</span></p>
         </div>
     </div>
 </section>
 
-<!-- Acquisition Strategy -->
-<section id="acquisition" class="py-10 bg-white">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-6">
-            <span class="en">Acquisition Strategy</span><span class="zh">获客策略</span>
-        </h2>
+<!-- PLACEHOLDER: Acquisition section will be added -->
+<section id="acquisition" class="max-w-7xl mx-auto px-4 py-8">
+    <h2 class="section-title"><span class="en">Go-to-Market & Acquisition Strategy</span><span class="zh">获客与市场策略（卖货侧）</span></h2>
 
-        <div class="grid lg:grid-cols-2 gap-6 mb-8">
-            <!-- Target x USP -->
+    <!-- Target Segments -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Target Segment Prioritization</span><span class="zh">目标客群优先级</span></h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="p-3 text-left border"><span class="en">Segment</span><span class="zh">客群</span></th>
+                        <th class="p-3 text-left border"><span class="en">USP (Why moomoo?)</span><span class="zh">核心卖点</span></th>
+                        <th class="p-3 text-center border"><span class="en">Conversion Ease</span><span class="zh">转化难度</span></th>
+                        <th class="p-3 text-left border"><span class="en">Key Action</span><span class="zh">关键动作</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-3 border font-medium"><span class="en">Active US Stock Traders (non-MM)</span><span class="zh">活跃美股交易者（非MM）</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Fees 1/4 of Rakuten/SBI, 24h trading, superior charting</span><span class="zh">手续费为乐天/SBI的1/4，24小时交易，更优图表</span></td>
+                        <td class="p-3 border text-center text-green-600 font-bold"><span class="en">Easy</span><span class="zh">易</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Fee comparison calculator + stock gift on account opening</span><span class="zh">手续费对比计算器 + 开户送股</span></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border font-medium"><span class="en">FX Traders (domestic broker users)</span><span class="zh">FX交易者（国内券商用户）</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Beautiful UI + tight spreads + multi-asset in one app</span><span class="zh">漂亮UI + 极低点差 + 一个app多资产</span></td>
+                        <td class="p-3 border text-center text-amber-600 font-bold"><span class="en">Medium</span><span class="zh">中</span></td>
+                        <td class="p-3 border text-xs"><span class="en">FX launch campaign with low-barrier rewards (food/guaranteed gifts)</span><span class="zh">FX上线活动配合低门槛奖励（食品/确定性赠品）</span></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border font-medium"><span class="en">Swing Traders (Rakuten margin users)</span><span class="zh">Swing交易者（乐天信用用户）</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Trailing stop, screener saves, 90-day orders, OCO</span><span class="zh">追踪止损、筛选器保存、90天有效期、OCO</span></td>
+                        <td class="p-3 border text-center text-amber-600 font-bold"><span class="en">Medium</span><span class="zh">中</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Feature comparison videos on YouTube; "try alongside Rakuten" positioning</span><span class="zh">YouTube功能对比视频；"和乐天并行试用"定位</span></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border font-medium"><span class="en">Hands-off Investors (copy trade demand)</span><span class="zh">放置型投资者（跟单需求）</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Copy trading + Japan-based trust + automation</span><span class="zh">跟单交易 + 日本公司信任 + 自动化</span></td>
+                        <td class="p-3 border text-center text-red-600 font-bold"><span class="en">Hard</span><span class="zh">难</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Requires copy trading product launch first; then position vs XM Trading</span><span class="zh">需要先上线跟单产品；然后对标XM Trading定位</span></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border font-medium"><span class="en">Young First-time Investors</span><span class="zh">年轻首次投资者</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Best app UX + educational content + mini-stock (1 share)</span><span class="zh">最优app体验 + 教育内容 + 单元未満株（1股）</span></td>
+                        <td class="p-3 border text-center text-amber-600 font-bold"><span class="en">Medium</span><span class="zh">中</span></td>
+                        <td class="p-3 border text-xs"><span class="en">Campus/social media presence; "20代の証券口座は絶対moomoo" positioning</span><span class="zh">校园/社交媒体布局；"20多岁开户就选moomoo"定位</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Campaign Design Insights -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Campaign Design Insights (from interviews)</span><span class="zh">活动设计洞察（来自访谈）</span></h3>
+        <div class="grid md:grid-cols-2 gap-6">
             <div>
-                <h3 class="text-sm font-semibold mb-3">
-                    <span class="en">Target x USP Matrix</span><span class="zh">目标客群 x USP 矩阵</span>
-                </h3>
-                <table class="w-full text-xs border border-gray-200 rounded-lg overflow-hidden">
-                    <thead class="bg-gray-800 text-white">
-                        <tr>
-                            <th class="px-3 py-2 text-left">Target</th>
-                            <th class="px-3 py-2 text-left">USP</th>
-                            <th class="px-3 py-2 text-center">
-                                <span class="en">Feasibility</span><span class="zh">可行性</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-600">
-                        <tr class="border-b"><td class="px-3 py-2 font-medium">Rakuten</td><td class="px-3 py-2">Order UX + Margin Rate + Info</td><td class="px-3 py-2 text-center"><span class="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px]">Medium</span></td></tr>
-                        <tr class="border-b bg-gray-50"><td class="px-3 py-2 font-medium">SBI</td><td class="px-3 py-2">Info Density + AI + Charts</td><td class="px-3 py-2 text-center"><span class="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px]">Medium</span></td></tr>
-                        <tr class="border-b"><td class="px-3 py-2 font-medium">Monex</td><td class="px-3 py-2">UI/UX + US Stock + Fees</td><td class="px-3 py-2 text-center"><span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">High</span></td></tr>
-                        <tr class="border-b"><td class="px-3 py-2 font-medium">FX Traders</td><td class="px-3 py-2">White UI + 1000-unit + Education + Food campaigns</td><td class="px-3 py-2 text-center"><span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">High</span></td></tr>
-                        <tr><td class="px-3 py-2 font-medium">New Users (US)</td><td class="px-3 py-2">24h trading + low fee + IPO access</td><td class="px-3 py-2 text-center"><span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">High</span></td></tr>
-                    </tbody>
-                </table>
+                <h4 class="font-semibold text-green-700 mb-2"><span class="en">What Works</span><span class="zh">有效策略</span></h4>
+                <ul class="text-sm space-y-2">
+                    <li class="flex gap-2"><span class="text-green-500">+</span><span><span class="en"><b>Guaranteed rewards > lottery:</b> "Don't do 'up to 100K yen'. Just guarantee 10K. People are sick of lottery."</span><span class="zh"><b>确定性奖励 > 抽奖：</b>"不要'最高10万日元'。直接保证给1万。大家已经厌倦抽奖了。"</span></span></li>
+                    <li class="flex gap-2"><span class="text-green-500">+</span><span><span class="en"><b>Stock gifts on account opening:</b> Multiple users cited "free stock" as appealing entry point</span><span class="zh"><b>开户送股：</b>多位用户认为"免费股票"是有吸引力的入场点</span></span></li>
+                    <li class="flex gap-2"><span class="text-green-500">+</span><span><span class="en"><b>Low-barrier physical rewards:</b> JFX's food campaigns (Wagyu beef, mango, curry) drive engagement without high trade volume requirements</span><span class="zh"><b>低门槛实物奖励：</b>JFX的食品活动（和牛、芒果、咖喱）无需高交易量即可驱动参与</span></span></li>
+                    <li class="flex gap-2"><span class="text-green-500">+</span><span><span class="en"><b>Migration cashback (% based):</b> "A few thousand yen won't move me. 1% cashback (cap 70-100K yen) would."</span><span class="zh"><b>转户返现（按比例）：</b>"几千日元我不会动。1%返现（上限7-10万）我会考虑。"</span></span></li>
+                </ul>
             </div>
-
-            <!-- Switching Barriers -->
             <div>
-                <h3 class="text-sm font-semibold mb-3">
-                    <span class="en">Switching Barriers & Countermeasures</span><span class="zh">切换壁垒与应对</span>
-                </h3>
-                <div class="space-y-2">
-                    <div class="flex gap-3 items-center bg-gray-50 rounded-lg p-3">
-                        <span class="text-[10px] font-medium text-red-600 bg-red-50 rounded px-2 py-0.5 w-20 text-center shrink-0">NISA</span>
-                        <span class="text-xs text-gray-600">
-                            <span class="en">Smooth transfer + bonus incentive (FX user confirmed intent to move NISA from SBI)</span>
-                            <span class="zh">顺畅转移 + 转入奖励（FX 用户确认想从 SBI 转 NISA）</span>
-                        </span>
-                    </div>
-                    <div class="flex gap-3 items-center bg-gray-50 rounded-lg p-3">
-                        <span class="text-[10px] font-medium text-red-600 bg-red-50 rounded px-2 py-0.5 w-20 text-center shrink-0">
-                            <span class="en">Bank</span><span class="zh">银行生态</span>
-                        </span>
-                        <span class="text-xs text-gray-600">
-                            <span class="en">Bank partnerships + Cash Sweep</span>
-                            <span class="zh">银行合作 + Cash Sweep</span>
-                        </span>
-                    </div>
-                    <div class="flex gap-3 items-center bg-gray-50 rounded-lg p-3">
-                        <span class="text-[10px] font-medium text-amber-600 bg-amber-50 rounded px-2 py-0.5 w-20 text-center shrink-0">
-                            <span class="en">Multi-Bkr</span><span class="zh">多券商</span>
-                        </span>
-                        <span class="text-xs text-gray-600">
-                            <span class="en">Portfolio aggregation + "2nd broker" positioning</span>
-                            <span class="zh">Portfolio 聚合 + "第二券商"定位</span>
-                        </span>
-                    </div>
-                    <div class="flex gap-3 items-center bg-gray-50 rounded-lg p-3">
-                        <span class="text-[10px] font-medium text-amber-600 bg-amber-50 rounded px-2 py-0.5 w-20 text-center shrink-0">
-                            <span class="en">Gap</span><span class="zh">功能差距</span>
-                        </span>
-                        <span class="text-xs text-gray-600">
-                            <span class="en">Communicate clear differentiation (don't overlap SBI)</span>
-                            <span class="zh">明确传达差异化（不要与 SBI 重叠）</span>
-                        </span>
-                    </div>
-                </div>
+                <h4 class="font-semibold text-red-700 mb-2"><span class="en">What Doesn't Work</span><span class="zh">无效策略</span></h4>
+                <ul class="text-sm space-y-2">
+                    <li class="flex gap-2"><span class="text-red-500">-</span><span><span class="en"><b>High-volume trade requirements:</b> "The campaign requires millions in trades I'll never do"</span><span class="zh"><b>高交易量要求：</b>"活动要求我做不到的几百万交易量"</span></span></li>
+                    <li class="flex gap-2"><span class="text-red-500">-</span><span><span class="en"><b>Lottery-style "up to X" format:</b> Creates distrust, users assume they'll get minimum</span><span class="zh"><b>抽奖式"最高X"格式：</b>产生不信任感，用户默认自己只能拿到最低档</span></span></li>
+                    <li class="flex gap-2"><span class="text-red-500">-</span><span><span class="en"><b>Pure brand advertising without feature demo:</b> Users need to see the product to be convinced</span><span class="zh"><b>纯品牌广告无功能演示：</b>用户需要看到产品才能被说服</span></span></li>
+                    <li class="flex gap-2"><span class="text-red-500">-</span><span><span class="en"><b>IPO/speculative imagery:</b> Creates "gambling" association that blocks referrals</span><span class="zh"><b>IPO/投机形象：</b>造成"赌博"联想，阻碍用户转介</span></span></li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <!-- Trust -->
-        <div class="bg-gray-900 rounded-xl p-5 text-white">
-            <h3 class="text-sm font-semibold mb-3">
-                <span class="en">Trust Building in Japan</span><span class="zh">日本市场信任建设</span>
-            </h3>
-            <div class="grid md:grid-cols-3 gap-4 text-xs">
-                <div>
-                    <div class="text-orange-300 font-medium mb-1">
-                        <span class="en">Brand Issue</span><span class="zh">品牌背景</span>
-                    </div>
-                    <p class="text-gray-300 en">Users suspect "Chinese company" -> Reinforce JP legal entity + NASDAQ listed</p>
-                    <p class="text-gray-300 zh">用户知道/猜测"中国企业" -> 强化日本法人+NASDAQ 上市</p>
-                </div>
-                <div>
-                    <div class="text-orange-300 font-medium mb-1">
-                        <span class="en">Channels</span><span class="zh">渠道策略</span>
-                    </div>
-                    <p class="text-gray-300 en">OOH & physical stores > referrals; FX user: "store = trust" (SBI model validated)</p>
-                    <p class="text-gray-300 zh">OOH 和实体店 > Referral；FX 用户："实体店=信任"（SBI 模式验证）</p>
-                </div>
-                <div>
-                    <div class="text-orange-300 font-medium mb-1">
-                        <span class="en">Referral Reality</span><span class="zh">Referral 现实</span>
-                    </div>
-                    <p class="text-gray-300 en">Culturally difficult: money/losses/responsibility -> soft promo</p>
-                    <p class="text-gray-300 zh">文化上困难：涉及金钱/亏损/责任 -> 软性推广</p>
-                </div>
+    <!-- Channel Strategy -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Channel Effectiveness (User-Reported Discovery)</span><span class="zh">渠道有效性（用户自述发现路径）</span></h3>
+        <div class="space-y-3">
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">YouTube (Investment channels)</span><span class="zh">YouTube（投资频道）</span></span><span class="font-mono text-xs"><span class="en">Primary channel</span><span class="zh">主渠道</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-red-500" style="width:85%">85%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">X/Twitter (Word of mouth, ads)</span><span class="zh">X/Twitter（口碑、广告）</span></span><span class="font-mono text-xs"><span class="en">High reach</span><span class="zh">高触达</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-blue-500" style="width:70%">70%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">TV CM (松重豊 campaign)</span><span class="zh">电视广告（松重豊代言）</span></span><span class="font-mono text-xs"><span class="en">Brand awareness</span><span class="zh">品牌认知</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-purple-500" style="width:45%">45%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Threads (Meta) - Untapped</span><span class="zh">Threads (Meta) - 未开发</span></span><span class="font-mono text-xs"><span class="en">High engagement</span><span class="zh">高互动</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-green-500" style="width:30%">30%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Point/Affiliate Sites</span><span class="zh">积分/返利网站</span></span><span class="font-mono text-xs"><span class="en">Account opening</span><span class="zh">开户引流</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-amber-500" style="width:25%">25%</div></div></div>
+            <div><div class="flex justify-between text-sm mb-1"><span><span class="en">Physical Store (Shibuya)</span><span class="zh">实体店（涉谷）</span></span><span class="font-mono text-xs"><span class="en">Trust signal</span><span class="zh">信任信号</span></span></div><div class="w-full bg-gray-100 rounded h-5"><div class="freq-bar bg-orange-500" style="width:20%">20%</div></div></div>
+        </div>
+    </div>
+
+    <!-- Brand Positioning -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Brand Positioning Recommendations</span><span class="zh">品牌定位建议</span></h3>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                <h4 class="font-semibold text-red-700 mb-2"><span class="en">Current Perception (Problem)</span><span class="zh">当前认知（问题）</span></h4>
+                <ul class="text-sm space-y-1 text-gray-700">
+                    <li><span class="en">"moomoo = US stocks only"</span><span class="zh">"moomoo = 只做美股"</span></li>
+                    <li><span class="en">"Too professional / for active traders"</span><span class="zh">"太专业/给专业交易者用的"</span></li>
+                    <li><span class="en">"IPO and speculative trading image"</span><span class="zh">"IPO和投机交易的形象"</span></li>
+                    <li><span class="en">"Nobody around me uses it"</span><span class="zh">"周围没人用"</span></li>
+                </ul>
+            </div>
+            <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                <h4 class="font-semibold text-green-700 mb-2"><span class="en">Target Perception (Goal)</span><span class="zh">目标认知（方向）</span></h4>
+                <ul class="text-sm space-y-1 text-gray-700">
+                    <li><span class="en">"All-in-one investment platform (JP + US + FX)"</span><span class="zh">"一站式投资平台（日股+美股+FX）"</span></li>
+                    <li><span class="en">"Powerful yet approachable for wealth building"</span><span class="zh">"强大但亲民的资产增值平台"</span></li>
+                    <li><span class="en">"The smart choice for 20s-30s investors"</span><span class="zh">"20-30代投资者的聪明选择"</span></li>
+                    <li><span class="en">"Japan-based, trustworthy, with global data"</span><span class="zh">"日本本地公司，值得信赖，提供全球数据"</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-sm font-medium text-yellow-800"><span class="en">Key User Quote on Positioning:</span><span class="zh">用户关于定位的关键原话：</span></p>
+            <div class="quote-box"><span class="en">"Target a specific demographic intensely. Position as: 'If you're in your 20s and opening a brokerage account, it's absolutely moomoo.' That's how you win."</span><span class="zh">"特定の層に徹底的に刺さるブランドで固めていく方がいい。20代前半で証券口座開設するなら絶対ムームー、という選ばせ方。"</span></div>
+        </div>
+    </div>
+
+    <!-- Actionable Recommendations for Business Team -->
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+        <h3 class="font-bold text-lg mb-4"><span class="en">Business Operations Recommendations</span><span class="zh">业务运营建议（业务侧）</span></h3>
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold mb-2 text-sm"><span class="en">Onboarding Optimization</span><span class="zh">开户流程优化</span></div>
+                <ul class="text-xs space-y-1 text-gray-600">
+                    <li><span class="en">- Eliminate postal verification step (kills conversion momentum)</span><span class="zh">- 消除邮寄验证步骤（消磨转化动力）</span></li>
+                    <li><span class="en">- Offer human-assisted account opening (phone/video call support)</span><span class="zh">- 提供人工辅助开户（电话/视频通话支持）</span></li>
+                    <li><span class="en">- "Same-day trading" after account approval as strong message</span><span class="zh">- "当日即可交易"作为强营销信息</span></li>
+                </ul>
+            </div>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold mb-2 text-sm"><span class="en">NISA Migration Support</span><span class="zh">NISA转户支持</span></div>
+                <ul class="text-xs space-y-1 text-gray-600">
+                    <li><span class="en">- Dedicated migration concierge service</span><span class="zh">- 专属转户管家服务</span></li>
+                    <li><span class="en">- 1% cashback on transferred assets (cap at 70-100K yen)</span><span class="zh">- 转入资产1%返现（上限7-10万日元）</span></li>
+                    <li><span class="en">- Clear timeline communication (users fear the 3-4 month process)</span><span class="zh">- 清晰时间线沟通（用户担心3-4个月流程）</span></li>
+                </ul>
+            </div>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold mb-2 text-sm"><span class="en">Trust Building</span><span class="zh">信任建设</span></div>
+                <ul class="text-xs space-y-1 text-gray-600">
+                    <li><span class="en">- Leverage Shibuya physical store as trust anchor in all marketing</span><span class="zh">- 将涉谷实体店作为所有营销的信任锚点</span></li>
+                    <li><span class="en">- "Japan-based, NASDAQ-listed parent" messaging</span><span class="zh">- "日本本地公司，母公司纳斯达克上市"信息传递</span></li>
+                    <li><span class="en">- Partner with relatable influencers (not just finance pros)</span><span class="zh">- 与亲民KOL合作（不只是金融专业人士）</span></li>
+                    <li><span class="en">- Community-driven social proof (profit sharing feature as viral loop)</span><span class="zh">- 社区驱动社交证明（损益分享功能作为传播循环）</span></li>
+                </ul>
+            </div>
+            <div class="border rounded-lg p-4">
+                <div class="font-semibold mb-2 text-sm"><span class="en">Retention Mechanics</span><span class="zh">留存机制</span></div>
+                <ul class="text-xs space-y-1 text-gray-600">
+                    <li><span class="en">- Lending stock service (貸株) for passive income on idle holdings</span><span class="zh">- 貸株服务（持仓闲置时赚取被动收入）</span></li>
+                    <li><span class="en">- MMF auto-sweep as Rakuten bank-sweep equivalent</span><span class="zh">- MMF自动申赎作为乐天银行自动归集的对标</span></li>
+                    <li><span class="en">- Technical push notifications (MACD cross, MA signals) to drive daily opens</span><span class="zh">- 技术指标推送通知（MACD交叉、均线信号）驱动每日打开</span></li>
+                    <li><span class="en">- AI prediction track record display (builds trust in platform intelligence)</span><span class="zh">- AI预测历史准确率展示（建立对平台智能的信任）</span></li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid md:grid-cols-2 gap-6 text-xs">
-            <div>
-                <h4 class="font-semibold text-white text-sm mb-2">
-                    <span class="en">Data Sources</span><span class="zh">数据来源</span>
-                </h4>
-                <ul class="space-y-1">
-                    <li class="en">Day 1-8: Quick Notes summaries</li>
-                    <li class="en">Day 9-10: Full verbatim transcripts (Feishu Docs)</li>
-                    <li class="en">Day 11: Pending transcript access</li>
-                    <li class="en">Week 1 (Day 1-4) structured summaries less detailed</li>
-                    <li class="zh">Day 1-8：Quick Notes 总结</li>
-                    <li class="zh">Day 9-10：完整逐字稿（飞书文档）</li>
-                    <li class="zh">Day 11：待逐字稿访问</li>
-                    <li class="zh">Week 1（Day 1-4）结构化总结较简略</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-semibold text-white text-sm mb-2">
-                    <span class="en">Next Steps</span><span class="zh">后续建议</span>
-                </h4>
-                <ul class="space-y-1">
-                    <li class="en">1. Supplement with Day 11 (4/27) interview findings</li>
-                    <li class="en">2. Re-slice by user persona (new vs. experienced, high vs. low AUM)</li>
-                    <li class="en">3. Quantify priorities (ICE/RICE scoring)</li>
-                    <li class="en">4. Align P&L % fix with development sprint</li>
-                    <li class="zh">1. 补充 Day 11（4/27）访谈发现</li>
-                    <li class="zh">2. 按用户画像重新切片（新vs老用户、大vs小客户）</li>
-                    <li class="zh">3. 量化优先级（ICE/RICE 评分）</li>
-                    <li class="zh">4. P&L % 修复对齐开发排期</li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 mt-6 pt-4 text-center text-[10px] text-gray-500">
-            moomoo JP Market Research Team | Internal Use Only | Updated 2026-04-27
-        </div>
+<footer class="bg-gray-900 text-gray-400 py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+        <p><span class="en">moomoo Securities Japan - User Research 2026 Q2</span><span class="zh">moomoo证券日本 - 2026 Q2 用户研究</span></p>
+        <p class="mt-2 text-xs text-gray-500"><span class="en">Data from 27 in-depth interviews. For internal use only.</span><span class="zh">数据来源：27场深度用户访谈。仅供内部使用。</span></p>
     </div>
 </footer>
 
 <script>
-function toggle(id) {
-    const el = document.getElementById(id);
-    const arr = document.getElementById('arr-' + id);
-    el.classList.toggle('open');
-    arr.style.transform = el.classList.contains('open') ? 'rotate(180deg)' : '';
-}
-
 function setLang(lang) {
     document.body.setAttribute('data-lang', lang);
-    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
-    localStorage.setItem('dash-lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    localStorage.setItem('dashboard-lang', lang);
 }
-
+function toggleCollapse(el) {
+    const content = el.nextElementSibling;
+    content.classList.toggle('open');
+    const arrow = el.querySelector('.arrow');
+    if (arrow) arrow.classList.toggle('rotate-180');
+}
 // Restore language preference
-const saved = localStorage.getItem('dash-lang');
-if (saved) setLang(saved);
+const savedLang = localStorage.getItem('dashboard-lang');
+if (savedLang) {
+    document.body.setAttribute('data-lang', savedLang);
+    document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', (savedLang === 'zh' && b.textContent === 'CN') || (savedLang === 'en' && b.textContent === 'EN'));
+    });
+}
 </script>
-
 </body>
 </html>
